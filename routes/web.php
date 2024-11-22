@@ -11,12 +11,13 @@ use App\Http\Controllers\PostController;
 
 // TOPページを投稿一覧に設定
 Route::get('/', [PostController::class, 'index'])->name('home');
+
 // 投稿リソース用のルート
 Route::resource('post', PostController::class);
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('post.index');
+// Route::get('/dashboard', function () {
+//     return view('dashboard');
+// })->middleware(['auth', 'verified'])->name('post.index');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
