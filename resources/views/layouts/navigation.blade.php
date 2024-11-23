@@ -6,20 +6,22 @@
                 <!-- Logo -->
                 <div class="shrink-0 flex items-center">
                     <a href="{{ route('post.index') }}">
-                        <x-application-logo class="block h-9 w-auto fill-current text-gray-800" />
+                        {{-- <x-application-logo class="block h-9 w-auto fill-current text-gray-800" /> --}}
+                        <img src="{{ asset('logo/logo.png') }}" class="block h-9 w-auto fill-current text-gray-800" alt="book-room">
+
                     </a>
                 </div>
 
-                @if(auth()->user())
-                <!-- Navigation Links -->
-                <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                    {{-- <x-nav-link :href="route('post.index')" :active="request()->routeIs('post.index')">
+                @if (auth()->user())
+                    <!-- Navigation Links -->
+                    <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                        {{-- <x-nav-link :href="route('post.index')" :active="request()->routeIs('post.index')">
                         HOME
                     </x-nav-link> --}}
-                    <x-nav-link :href="route('post.create')" :active="request()->routeIs('post.create')">
-                        新規作成
-                    </x-nav-link>
-                </div>
+                        <x-nav-link :href="route('post.create')" :active="request()->routeIs('post.create')">
+                            新規投稿
+                        </x-nav-link>
+                    </div>
                 @endif
             </div>
 
@@ -92,27 +94,30 @@
 
     <!-- Responsive Navigation Menu -->
     <div :class="{ 'block': open, 'hidden': !open }" class="hidden sm:hidden">
-        <div class="pt-2 pb-3 space-y-1">
+        {{-- <div class="pt-2 pb-3 space-y-1">
             <x-responsive-nav-link :href="route('post.index')" :active="request()->routeIs('dashboard')">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
-        </div>
+        </div> --}}
 
         <!-- Responsive Settings Options -->
         <div class="pt-4 pb-1 border-t border-gray-200">
             @if (auth()->check())
                 <div class="px-4">
-                    <div class="font-medium text-base text-gray-800">{{ auth()->user()->name }}</div>
-                    <div class="font-medium text-sm text-gray-500">{{ auth()->user()->email }}</div>
+                    <div class="font-medium text-base text-gray-800">{{ auth()->user()->name }}さん</div>
+                    {{-- <div class="font-medium text-sm text-gray-500">{{ auth()->user()->email }}</div> --}}
                 </div>
             @else
-                <p class="mx-1 my-1">ゲスト</p>
+                <p class="mx-1 my-1">ゲストさん</p>
             @endif
 
             <div class="mt-3 space-y-1">
                 @if (auth()->check())
                     <x-responsive-nav-link :href="route('profile.edit')">
                         {{ __('Profile') }}
+                    </x-responsive-nav-link>
+                    <x-responsive-nav-link :href="route('post.create')">
+                        {{ __('新規投稿') }}
                     </x-responsive-nav-link>
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf

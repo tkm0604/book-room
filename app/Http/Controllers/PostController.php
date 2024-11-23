@@ -45,9 +45,8 @@ class PostController extends Controller
         //画像の保存
         $original = $request->file('image')->getClientOriginalName(); //画像の名前を取得
         $name = date('YmdHis') . '_' . $original; //画像の名前を変更
-        request()->file('image')->storeAs('public/images', $name); //画像を保存
+        request()->file('image')->storeAs('/images',$name,'public'); //画像をstorage/app/public/imagesに保存
         $post->image = $name;
-
         $post->save();
         return redirect()->route('post.create')->with('message', '投稿を作成しました');
     }
@@ -57,7 +56,7 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
-        //
+        return view('post.show', compact('post'));
     }
 
     /**
@@ -65,7 +64,7 @@ class PostController extends Controller
      */
     public function edit(Post $post)
     {
-        //
+        return view('post.edit', compact('post'));
     }
 
     /**
@@ -73,7 +72,25 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
-        //
+        $input = $request->validate([
+            'title' => 'required|string|max:255',
+            'body' => 'required|string|max_mb_chars:130',//Xへの投稿の文字数制限
+            'image' =>  ['required','file', 'image', 'mimes:jpeg,png,jpg', 'max:5120'],//画像のバリデーション
+        ]);
+
+        $post->title = $input['title'];
+        $post->body = $input['body'];
+
+        if($request->file('image')){
+            $original = $request->file('image')->getClientOriginalName(); //画像の名前を取得
+            $name = date('YmdHis') . '_' . $original; //画像の名前を変更
+            request()->file('image')->storeAs('/images',$name,'public'); //画像をstorage/app/public/imagesに保存
+            $post->image = $name;
+        }
+
+        $post->save();
+
+        return redirect()->route('post.show', $post)->with('message', '投稿を更新しました');
     }
 
     /**
@@ -81,6 +98,7 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
-        //
+        $post->delete();
+        return redirect()->route('home')->with('message', '投稿を削除しました');
     }
 }
