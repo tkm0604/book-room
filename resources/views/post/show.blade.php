@@ -36,7 +36,7 @@
                                 {{ $post->image }}
                             </div>
                             <div>
-                                <img src="{{ asset('storage/images/' . $post->image) }}" alt="画像">
+                                <img src="{{ $post->image }}" alt="画像">
                             </div>
                         @endif
                         <div class="text-sm font-semibold flex flex-row-reverse">

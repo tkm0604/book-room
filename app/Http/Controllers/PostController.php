@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Storage;
 
 class PostController extends Controller
 {
@@ -42,11 +43,18 @@ class PostController extends Controller
         $post->title = $request->title;
         $post->body = $request->body;
         $post->user_id = auth()->user()->id;
-        //画像の保存
-        $original = $request->file('image')->getClientOriginalName(); //画像の名前を取得
-        $name = date('YmdHis') . '_' . $original; //画像の名前を変更
-        request()->file('image')->storeAs('/images',$name,'public'); //画像をstorage/app/public/imagesに保存
-        $post->image = $name;
+        //画像の名前を取得
+        $original = $request->file('image')->getClientOriginalName();
+        //画像の名前を変更
+        $name = date('YmdHis') . '_' . $original;
+
+        // S3に画像をアップロード
+        $path = request()->file('image')->storeAs('images', $name, 's3');
+         // S3のURLを取得してDBに保存
+         $url = Storage::disk('s3')->url($path);
+         $post->image = $url;
+
+        // Postを保存
         $post->save();
         return redirect()->route('post.create')->with('message', '投稿を作成しました');
     }
@@ -84,8 +92,22 @@ class PostController extends Controller
         if($request->file('image')){
             $original = $request->file('image')->getClientOriginalName(); //画像の名前を取得
             $name = date('YmdHis') . '_' . $original; //画像の名前を変更
-            request()->file('image')->storeAs('/images',$name,'public'); //画像をstorage/app/public/imagesに保存
-            $post->image = $name;
+            // S3に画像をアップロード
+            $path = request()->file('image')->storeAs('images', $name, 's3');
+            // S3のURLを取得してDBに保存
+            $url = Storage::disk('s3')->url($path);
+
+            // 古い画像を削除
+            if($post->image){
+                 // S3のURLを画像パスに変換
+                 $oldImagePath = parse_url($post->image, PHP_URL_PATH);
+                 $oldImagePath = ltrim($oldImagePath, '/'); // パスの先頭にスラッシュがあれば削除
+                // 古い画像をS3から削除
+                Storage::disk('s3')->delete($oldImagePath);
+            }
+
+            // 新しい画像のURLを保存
+            $post->image = $url;
         }
 
         $post->save();
@@ -98,6 +120,15 @@ class PostController extends Controller
      */
     public function destroy(Post $post)
     {
+        // S3に画像が存在する場合、削除する
+        if($post->image)
+        {
+            // S3のURLを画像パスに変換
+            $imagePath = parse_url($post->image, PHP_URL_PATH);
+            $imagePath = ltrim($imagePath, '/'); // パスの先頭にスラッシュがあれば削除
+            // 画像をS3から削除
+            Storage::disk('s3')->delete($imagePath);
+        }
         $post->delete();
         return redirect()->route('home')->with('message', '投稿を削除しました');
     }
