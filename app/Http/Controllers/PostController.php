@@ -129,6 +129,7 @@ class PostController extends Controller
             // 画像をS3から削除
             Storage::disk('s3')->delete($imagePath);
         }
+        $post->comments()->delete();
         $post->delete();
         return redirect()->route('home')->with('message', '投稿を削除しました');
     }

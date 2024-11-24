@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
+use App\Http\Controllers\CommentController;
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -14,6 +15,10 @@ Route::get('/', [PostController::class, 'index'])->name('home');
 
 // 投稿リソース用のルート
 Route::resource('post', PostController::class);
+
+
+// コメント用のルート
+Route::post('/post/comment/store', [CommentController::class, 'store'])->name('comment.store');
 
 // Route::get('/dashboard', function () {
 //     return view('dashboard');
