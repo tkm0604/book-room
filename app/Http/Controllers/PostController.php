@@ -71,8 +71,13 @@ class PostController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Post $post)
+    public function edit(Request $request,Post $post)
     {
+        // ポリシーを使用して認可
+        if($request->user()->cannot('update',$post)){
+            abort(403);
+        }
+
         return view('post.edit', compact('post'));
     }
 
@@ -81,6 +86,11 @@ class PostController extends Controller
      */
     public function update(Request $request, Post $post)
     {
+        // ポリシーを使用して認可
+        if($request->user()->cannot('update',$post)){
+            abort(403);
+        }
+
         $input = $request->validate([
             'title' => 'required|string|max:255',
             'body' => 'required|string|max_mb_chars:130',//Xへの投稿の文字数制限
@@ -119,8 +129,12 @@ class PostController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Post $post)
+    public function destroy(Request $request,Post $post)
     {
+        if($request->user()->cannot('update',$post)){
+            abort(403);
+        }
+
         // S3に画像が存在する場合、削除する
         if($post->image)
         {
@@ -132,7 +146,7 @@ class PostController extends Controller
         }
         $post->comments()->delete();
         $post->delete();
-        return redirect()->route('home')->with('message', '投稿を削除しました');
+        return redirect()->route('home.index')->with('message', '投稿を削除しました');
     }
 
     public function mypost()

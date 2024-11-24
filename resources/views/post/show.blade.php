@@ -19,14 +19,18 @@
                                 {{ $post->title }}
                             </h1>
                             <div class="flex gap-x-2">
+                                @can('delete',$post)
                                 <form method="post" action="{{ route('post.destroy', $post) }}">
                                     @csrf
                                     @method('delete')
                                     <x-primary-button class="bg-red-700 float-right"
                                         onClick="return confirm('本当に削除しますか？');">削除</x-primary-button>
                                 </form>
+                                @endcan
+                                @can('update',$post)
                                 <a href="{{ route('post.edit', $post) }}"><x-primary-button
                                         class="bg-teal-700 float-right">編集</x-primary-button></a>
+                                @endcan
                             </div>
                         </div>
                         <hr class="w-full">

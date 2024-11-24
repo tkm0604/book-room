@@ -11,8 +11,9 @@ use App\Http\Controllers\ContactController;
 // });
 
 
+
 // TOPページを投稿一覧に設定
-Route::get('/', [PostController::class, 'index'])->name('home');
+Route::get('/', [PostController::class, 'index'])->name('home.index');
 //自分の投稿のみ表示
 Route::get('post/mypost',[PostController::class, 'mypost'])->name('post.mypost');
 //自分のコメント投稿のみ表示
@@ -27,14 +28,17 @@ Route::post('/post/comment/store', [CommentController::class, 'store'])->name('c
 Route::get('contact/create', [ContactController::class, 'create'])->name('contact.create');
 Route::post('contact/store', [ContactController::class, 'store'])->name('contact.store');
 
-// Route::get('/dashboard', function () {
-//     return view('dashboard');
-// })->middleware(['auth', 'verified'])->name('post.index');
+Route::middleware(['auth','can:admin'])->group(function(){
+    Route::get('profile/index', [ProfileController::class, 'index'])->name('profile.index');
+});
 
+
+// プロフィール用のルート
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    // Route::get('profile/index', [ProfileController::class, 'index'])->name('profile.index');
 });
 
 

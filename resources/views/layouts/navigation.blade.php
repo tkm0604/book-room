@@ -30,6 +30,12 @@
                         <x-nav-link :href="route('contact.create')">
                             お問い合わせ
                         </x-nav-link>
+                        @can('admin')
+                            <x-nav-link :href="route('profile.index')">
+                                ユーザー一覧
+                            </x-nav-link>
+                        @endcan
+
                     </div>
                     {{-- @else
                     <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
@@ -143,6 +149,11 @@
                     <x-responsive-nav-link :href="route('post.mycomment')">
                         {{ __('自分のコメントした投稿') }}
                     </x-responsive-nav-link>
+                    @can('admin')
+                    <x-responsive-nav-link :href="route('profile.index')">
+                        {{ __('ユーザー一覧') }}
+                    </x-responsive-nav-link>
+                    @endcan
                     <form method="POST" action="{{ route('logout') }}">
                         @csrf
                         <x-responsive-nav-link :href="route('logout')"
