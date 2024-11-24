@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
 use App\Models\User;
+use Illuminate\Support\Facades\Storage;
 class ProfileController extends Controller
 {
     /**
@@ -30,6 +31,21 @@ class ProfileController extends Controller
 
         if ($request->user()->isDirty('email')) {
             $request->user()->email_verified_at = null;
+        }
+
+        // アバター画像の保存
+        if($request->validated('avatar')) {
+            // 既存のアバター画像を削除
+            $user=User::find(auth()->user()->id);
+            if($user->avatar!=='default.jpg'){
+                $oldavatar='avatar/'.$user->avatar;
+                Storage::disk('public')->delete($oldavatar);
+            }
+
+            $name=request()->file( 'avatar')->getClientOriginalName();
+            $avatar=date('Ymd_His').'_'.$name;
+            request()->file( 'avatar')->storeAs('/avatar', $avatar, 'public');
+            $request->user()->avatar = $avatar;
         }
 
         $request->user()->save();

@@ -14,10 +14,17 @@
 
                 <div class="bg-white w-full  rounded-2xl px-10 py-8 shadow-lg hover:shadow-2xl transition duration-500">
                     <div class="mt-4">
-                        <div class="sm:flex justify-between mb-2">
-                            <h1 class="text-lg text-gray-700 font-semibold">
-                                {{ $post->title }}
-                            </h1>
+                        <div class="bg-white w-full  rounded-2xl px-10 pt-2 pb-8 shadow-lg hover:shadow-2xl transition duration-500">
+                            <div class="flex justify-between items-center mt-4">
+                                <div class="flex">
+                                    <div class="rounded-full w-20">
+                                        {{-- アバター表示 --}}
+                                        <img class="rounded-full " src="{{asset('storage/avatar/'.($post->user->avatar??'user_default.jpg'))}}">
+                                    </div>
+                                    <h1 class="text-lg text-gray-700 font-semibold float-left pt-4">
+                                        {{ $post->title }}
+                                    </h1>
+                                </div>
                             <div class="flex gap-x-2">
                                 @can('delete',$post)
                                 <form method="post" action="{{ route('post.destroy', $post) }}">
@@ -63,12 +70,17 @@
 
                 {{-- コメント表示 --}}
                 @foreach ($post->comments as $comment)
-                    <div class="bg-white w-full  rounded-2xl px-10 py-2 shadow-lg mt-8 whitespace-pre-line">
-                        {{ $comment->body }}
-                        <div class="text-sm font-semibold flex flex-row-reverse">
-                            <p>{{ $comment->user->name }} ・{{ $comment->created_at->diffForHumans() }}</p>
-                        </div>
+                <div class="bg-white w-full  rounded-2xl px-10 py-8 shadow-lg mt-8 whitespace-pre-line">
+                    {{$comment->body}}
+                    <div class="text-sm font-semibold flex flex-row-reverse">
+                        {{-- クラスを変更 --}}
+                        <p class="float-left pt-4"> {{ $comment->user->name }} • {{$comment->created_at->diffForHumans()}}</p>
+                        {{-- アバター追加 --}}
+                        <span class="rounded-full w-12 h-12">
+                        <img src="{{asset('storage/avatar/'.($comment->user->avatar??'user_default.jpg'))}}">
+                        </span>
                     </div>
+                </div>
                 @endforeach
                 {{-- コメント表示ここまで --}}
             </div>
