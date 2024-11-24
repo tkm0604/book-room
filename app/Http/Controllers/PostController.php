@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Comment;
 use App\Models\Post;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -132,5 +133,19 @@ class PostController extends Controller
         $post->comments()->delete();
         $post->delete();
         return redirect()->route('home')->with('message', '投稿を削除しました');
+    }
+
+    public function mypost()
+    {
+        $user = auth()->user();
+        $posts = Post::where('user_id',$user->id)->orderBy('created_at','desc')->get();
+        return view('post.mypost', compact('posts'));
+    }
+
+    public function mycomment()
+    {
+        $user = auth()->user();
+        $comments = Comment::where('user_id',$user->id)->orderBy('created_at','desc')->get();
+        return view('post.mycomment', compact('comments'));
     }
 }
