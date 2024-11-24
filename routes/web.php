@@ -13,7 +13,7 @@ use App\Http\Controllers\ContactController;
 
 
 // TOPページを投稿一覧に設定
-Route::get('/', [PostController::class, 'index'])->name('home.index');
+Route::get('/', [PostController::class, 'index'])->name('home');
 //自分の投稿のみ表示
 Route::get('post/mypost',[PostController::class, 'mypost'])->name('post.mypost');
 //自分のコメント投稿のみ表示
