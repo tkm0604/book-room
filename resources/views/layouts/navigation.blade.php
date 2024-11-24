@@ -27,7 +27,16 @@
                         <x-nav-link :href="route('post.mycomment')" :active="request()->routeIs('post.mypost')">
                             自分のコメントした投稿
                         </x-nav-link>
+                        <x-nav-link :href="route('contact.create')">
+                            お問い合わせ
+                        </x-nav-link>
                     </div>
+                    {{-- @else
+                    <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                        <x-nav-link :href="route('post.mycomment')" :active="request()->routeIs('post.mypost')">
+                            お問い合わせ
+                        </x-nav-link>
+                    </div> --}}
                 @endif
             </div>
 
@@ -72,10 +81,13 @@
                         @else
                             {{-- ゲストユーザーの時 --}}
                             <x-dropdown-link :href="route('login')">
-                                {{ __('Login') }}
+                                {{ __('ログイン') }}
                             </x-dropdown-link>
                             <x-dropdown-link :href="route('register')">
-                                {{ __('Create Account') }}
+                                {{ __('アカウントを作成') }}
+                            </x-dropdown-link>
+                            <x-dropdown-link :href="route('contact.create')">
+                                {{ __('お問い合わせ') }}
                             </x-dropdown-link>
                         @endif
                     </x-slot>
@@ -141,10 +153,13 @@
                     </form>
                 @else
                     <x-responsive-nav-link :href="route('login')">
-                        {{ __('Login') }}
+                        {{ __('ログイン') }}
                     </x-responsive-nav-link>
                     <x-responsive-nav-link :href="route('register')">
-                        {{ __('Create Account') }}
+                        {{ __('アカウントを作成') }}
+                    </x-responsive-nav-link>
+                    <x-responsive-nav-link :href="route('contact.create')">
+                        {{ __('お問い合わせ') }}
                     </x-responsive-nav-link>
                 @endif
             </div>

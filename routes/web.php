@@ -4,6 +4,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\CommentController;
+use App\Http\Controllers\ContactController;
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -21,6 +22,10 @@ Route::resource('post', PostController::class);
 
 // コメント用のルート
 Route::post('/post/comment/store', [CommentController::class, 'store'])->name('comment.store');
+
+//お問い合わせ
+Route::get('contact/create', [ContactController::class, 'create'])->name('contact.create');
+Route::post('contact/store', [ContactController::class, 'store'])->name('contact.store');
 
 // Route::get('/dashboard', function () {
 //     return view('dashboard');
