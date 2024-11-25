@@ -11,7 +11,6 @@
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="sm:p-8 sm:mx-4">
             <div class="sm:px-10 mt-4">
-
                 <div class="bg-white w-full  rounded-2xl px-10 py-8 shadow-lg hover:shadow-2xl transition duration-500">
                     <div class="mt-4">
                         <div class="bg-white w-full  rounded-2xl px-10 pt-2 pb-8 shadow-lg hover:shadow-2xl transition duration-500">
@@ -19,7 +18,7 @@
                                 <div class="flex">
                                     <div class="rounded-full w-20">
                                         {{-- アバター表示 --}}
-                                        <img class="rounded-full " src="{{asset('storage/avatar/'.($post->user->avatar??'user_default.jpg'))}}">
+                                        <img class="rounded-full " src="{{asset($post->user->avatar ?? 'user_default.jpg')}}">
                                     </div>
                                     <h1 class="text-lg text-gray-700 font-semibold float-left pt-4">
                                         {{ $post->title }}
@@ -44,7 +43,7 @@
                         <p  class="mt-4 text-gray-600 py-4 break-words">{{ $post->body }}</p>
                         @if ($post->image)
                             <div>
-                                {{ $post->image }}
+                              <p> {{ $post->image }}</p>
                             </div>
                             <div>
                                 <img src="{{ $post->image }}" alt="画像">
@@ -76,7 +75,7 @@
                         <p class="float-left pt-4"> {{ $comment->user->name }} • {{$comment->created_at->diffForHumans()}}</p>
                         {{-- アバター追加 --}}
                         <span class="rounded-full w-12 h-12">
-                        <img src="{{asset('storage/avatar/'.($comment->user->avatar??'user_default.jpg'))}}">
+                        <img src="{{asset($comment->user->avatar ?? 'user_default.jpg')}}">
                         </span>
                     </div>
                 </div>

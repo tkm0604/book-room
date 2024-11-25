@@ -2,13 +2,14 @@
     <header>
         <h2 class="text-lg font-medium text-gray-900">
             {{ __('Profile Information') }}
+
         </h2>
 
         <p class="mt-1 text-sm text-gray-600">
             {{ __("Update your account's profile information and email address.") }}
         </p>
     </header>
-    @if (!isset($admin))
+    @if (!$admin)
         <form id="send-verification" method="post" action="{{ route('verification.send') }}">
             @csrf
         </form>
@@ -55,9 +56,11 @@
         @endif
     </div>
     <div>
+
         <x-input-label for="avatar" :value="__('プロフィール画像（任意・1MBまで）')" />
         <div class="rounded-full w-36">
-            <img src="{{ asset('storage/avatar/' . ($user->avatar ?? 'user_default.jpg')) }}">
+            {{-- アバター表示 --}}
+            <img src="{{ $user->avatar && $user->avatar !== 'user_default.jpg' ? asset($user->avatar) : asset('storage/avatar/user_default.jpg') }}">
         </div>
         <x-text-input id="avatar" name="avatar" type="file" class="mt-1 block w-full" :value="old('avatar')" />
         <x-input-error class="mt-2" :messages="$errors->get('avatar')" />

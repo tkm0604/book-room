@@ -24,8 +24,10 @@
                         <td class="border-gray-light border hover:bg-gray-100 p-3">{{ $user->name }}</td>
                         <td class="border-gray-light border hover:bg-gray-100 p-3">{{ $user->email }}</td>
                         <td class="border-gray-light border hover:bg-gray-100 p-3">
-                            <div>
-                                <img src="{{ asset('storage/avatar/' . ($user->avatar ?? 'user_default.jpg')) }}" alt="">
+                            <div class="w-48 mx-auto">
+                                <img src="{{$user->avatar !== 'user_default.jpg' ? asset($user->avatar) : asset('storage/avatar/user_default.jpg') }}">
+
+                                {{-- <img src="{{ asset('storage/avatar/' . ($user->avatar ?? 'user_default.jpg')) }}" alt=""> --}}
                             </div>
                         </td>
                         <td class="border-gray-light border hover:bg-gray-100 p-3">

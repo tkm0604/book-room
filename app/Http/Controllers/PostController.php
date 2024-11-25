@@ -111,7 +111,7 @@ class PostController extends Controller
             // 古い画像を削除
             if($post->image){
                  // S3のURLを画像パスに変換
-                 $oldImagePath = parse_url($post->image, PHP_URL_PATH);
+                 $oldImagePath = parse_url($post->image, PHP_URL_PATH); //パスを抽出
                  $oldImagePath = ltrim($oldImagePath, '/'); // パスの先頭にスラッシュがあれば削除
                 // 古い画像をS3から削除
                 Storage::disk('s3')->delete($oldImagePath);
