@@ -5,6 +5,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ContactController;
+use App\Http\Controllers\RoleController;
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -33,13 +34,34 @@ Route::middleware(['auth','can:admin'])->group(function(){
 });
 
 
-// プロフィール用のルート
+// 一般ユーザー用のプロフィールルート
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    // Route::get('profile/index', [ProfileController::class, 'index'])->name('profile.index');
 });
+
+
+// 管理者用のプロフィールルート
+Route::middleware(['auth', 'can:admin'])->group(function () {
+    Route::get('/profile/adedit/{user}', [ProfileController::class, 'adedit'])->name('profile.adedit');
+    Route::patch('/profile/adupdate/{user}', [ProfileController::class, 'adupdate'])->name('profile.adupdate');
+
+    Route::patch('role/{user}',[RoleController::class,'attach'])->name('role.attach');
+    ROute::patch('role/{user}/detach',[RoleController::class,'detach'])->name('role.detach');
+
+    Route::delete('profile/{user}',[ProfileController::class,'addestroy'])->name('profile.addestroy');
+});
+
+// プロフィール用のルート
+// Route::middleware('auth')->group(function () {
+//     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+//     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+//     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+//     Route::get('/profile/adedit/{user}', [ProfileController::class, 'adedit'])->name('profile.adedit');
+//     Route::patch('/profile/adupdate/{user}',[ProfileController::class, 'adupdate'])->name('profile.adupdate');
+//     // Route::get('profile/index', [ProfileController::class, 'index'])->name('profile.index');
+// });
 
 
 require __DIR__.'/auth.php';
