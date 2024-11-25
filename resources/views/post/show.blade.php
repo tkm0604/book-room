@@ -73,7 +73,6 @@
                 <div class="bg-white w-full  rounded-2xl px-10 py-8 shadow-lg mt-8 whitespace-pre-line">
                     {{$comment->body}}
                     <div class="text-sm font-semibold flex flex-row-reverse">
-                        {{-- クラスを変更 --}}
                         <p class="float-left pt-4"> {{ $comment->user->name }} • {{$comment->created_at->diffForHumans()}}</p>
                         {{-- アバター追加 --}}
                         <span class="rounded-full w-12 h-12">

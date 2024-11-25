@@ -133,7 +133,13 @@ public function addestroy(User $user){
         $oldavatar = 'avatar/' . $user->avatar;
         Storage::disk('public')->delete($oldavatar);
     }
+ // ユーザーの投稿を削除
+    $user->posts()->delete();
+     // ユーザーのコメントを削除
+     $user->comments()->delete();
+     // ユーザーのロールを解除
     $user->roles()->detach();
+    // ユーザーを削除
     $user->delete();
     return back()->with('message', 'ユーザーを削除しました');
 }
