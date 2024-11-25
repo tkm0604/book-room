@@ -6,6 +6,7 @@ use App\Http\Controllers\PostController;
 use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\RoleController;
+use App\Http\Controllers\Auth\SocialAuthController;
 
 // Route::get('/', function () {
 //     return view('welcome');
@@ -63,5 +64,10 @@ Route::middleware(['auth', 'can:admin'])->group(function () {
 //     // Route::get('profile/index', [ProfileController::class, 'index'])->name('profile.index');
 // });
 
+//Xのアカウント認証
+// X認証のリダイレクト
+Route::get('login/x', [SocialAuthController::class, 'redirectToProvider'])->name('twitter.redirect');
+// X認証のコールバック
+Route::get('login/x/callback', [SocialAuthController::class, 'handleProviderCallback'])->name('twitter.callback');
 
 require __DIR__.'/auth.php';

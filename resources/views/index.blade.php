@@ -25,8 +25,7 @@
                         <div class="flex">
                             <div class="rounded-full w-12 h-12">
                                 {{-- アバター表示 --}}
-                                <img src="{{$post->user->avatar !== 'user_default.jpg' ? asset($user->avatar) : asset('storage/avatar/user_default.jpg') }}">
-                                {{-- <img src="{{asset($post->user->avatar ?? 'storage/avatar/user_default.jpg')}}"> --}}
+                                <img src="{{ isset($post->user) && $post->user->avatar !== 'user_default.jpg' ? asset($post->user->avatar) : asset('storage/avatar/user_default.jpg') }}">
                             </div>
                             <h1 class="text-lg text-gray-700 font-semibold hover:underline cursor-pointer float-left pt-4">
                                 <a href="{{route('post.show', $post)}}">{{ $post->title }}</a>

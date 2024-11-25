@@ -148,8 +148,10 @@ class ProfileController extends Controller
     {
         // ユーザーのアバターを削除
         if ($user->avatar !== 'user_default.jpg') {
-            $oldavatar = 'avatar/' . $user->avatar;
-            Storage::disk('public')->delete($oldavatar);
+            // URLからS3のパスを取得
+            $avatarPath = parse_url($user->avatar, PHP_URL_PATH);
+            $avatarPath = ltrim($avatarPath, '/'); // 先頭のスラッシュを削除
+            Storage::disk('s3')->delete($avatarPath); // S3から削除
         }
         // ユーザーの投稿を削除
         $user->posts()->delete();
