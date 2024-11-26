@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\Rules;
 use Illuminate\View\View;
+use Illuminate\Support\Facades\Storage;
 
 class RegisteredUserController extends Controller
 {
@@ -43,14 +44,20 @@ class RegisteredUserController extends Controller
             'password' => Hash::make($request->password),
         ];
 
-        //avatarの保存
-        if(request()->hasFile('avatar')){
-            $name = request()->file('avatar')->getClientOriginalName();
-            $avatar = date('Ymd_His') . '_' . $name;
-            request()->file('avatar')->storeAs('avatar', $avatar, 'public');
-            //avatarをデータに追加
-            $attr['avatar'] = $avatar;
-        }
+    // アバターの保存
+    if ($request->hasFile('avatar')) {
+        $name = $request->file('avatar')->getClientOriginalName(); // オリジナルファイル名
+        $avatar = date('Ymd_His') . '_' . $name; // 日時を加えたユニークなファイル名
+        $path = $request->file('avatar')->storeAs('images/avatar', $avatar, 's3'); // S3に保存
+        $url = Storage::disk('s3')->url($path); // S3のURLを取得
+
+        // アバターURLをデータに追加
+        $attr['avatar'] = $url;
+    } else {
+        // アバターがアップロードされなかった場合はデフォルトの画像を設定
+        $attr['avatar'] = 'storage/avatar/user_default.jpg';
+    }
+
 
         $user = User::create($attr);
 
