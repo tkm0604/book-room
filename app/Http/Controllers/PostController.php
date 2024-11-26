@@ -234,7 +234,7 @@ class PostController extends Controller
         $input = $request->validate([
             'title' => 'required|string|max:255',
             'body' => 'required|string|max_mb_chars:130', //Xへの投稿の文字数制限
-            'image' =>  ['required', 'file', 'image', 'mimes:jpeg,png,jpg', 'max:5120'], //画像のバリデーション
+            'image' =>  ['nullable', 'file', 'image', 'mimes:jpeg,png,jpg', 'max:5120'], //画像のバリデーション
         ]);
 
         $post->title = $input['title'];
@@ -262,9 +262,6 @@ class PostController extends Controller
         }
         //投稿を保存
         $post->save();
-
-        //正しい歯像パスを渡してTwitterに投稿
-        // $this->postTweet($post->title, $post->body, $imagePath);
 
         return redirect()->route('post.show', $post)->with('message', '投稿を更新しました');
     }
