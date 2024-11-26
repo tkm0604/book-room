@@ -12,7 +12,7 @@
                     </a>
                 </div>
 
-                @if (auth()->user())
+                @if (auth()->user() && (auth()->user()->email_verified_at || auth()->user()->twitter_token))
                     <!-- Navigation Links -->
                     <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                         {{-- <x-nav-link :href="route('post.index')" :active="request()->routeIs('post.index')">
@@ -24,7 +24,7 @@
                         <x-nav-link :href="route('post.mypost')" :active="request()->routeIs('post.mypost')">
                             自分の投稿
                         </x-nav-link>
-                        <x-nav-link :href="route('post.mycomment')" :active="request()->routeIs('post.mypost')">
+                        <x-nav-link :href="route('post.mycomment')" :active="request()->routeIs('post.mycomment')">
                             自分のコメントした投稿
                         </x-nav-link>
                         <x-nav-link :href="route('contact.create')">

@@ -7,7 +7,8 @@ use App\Http\Controllers\CommentController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\Auth\SocialAuthController;
-
+use Illuminate\Support\Facades\Auth;
+use App\Http\Middleware\EnsureEmailIsVerified;
 // Route::get('/', function () {
 //     return view('welcome');
 // });
@@ -26,18 +27,17 @@ Route::middleware(['auth', 'can:admin'])->group(function () {
 });
 
 
-// 一般ユーザー用のプロフィールルート
-Route::middleware('auth')->group(function () {
+// 認証済みかつメール確認済みユーザー用ルート
+Route::middleware(['auth', EnsureEmailIsVerified::class])->group(function(){
+
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 
     //自分の投稿のみ表示
     Route::get('post/mypost', [PostController::class, 'mypost'])->name('post.mypost');
-
     //自分のコメント投稿のみ表示
     Route::get('post/mycomment', [PostController::class, 'mycomment'])->name('post.mycomment');
-
     // コメント用のルート
     Route::post('/post/comment/store', [CommentController::class, 'store'])->name('comment.store');
 
