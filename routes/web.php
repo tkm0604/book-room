@@ -28,7 +28,7 @@ Route::middleware(['auth', 'can:admin'])->group(function () {
 
 
 // 認証済みかつメール確認済みユーザー用ルート
-Route::middleware(['auth', EnsureEmailIsVerified::class])->group(function(){
+Route::middleware(['auth', EnsureEmailIsVerified::class])->group(function () {
 
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
@@ -40,6 +40,12 @@ Route::middleware(['auth', EnsureEmailIsVerified::class])->group(function(){
     Route::get('post/mycomment', [PostController::class, 'mycomment'])->name('post.mycomment');
     // コメント用のルート
     Route::post('/post/comment/store', [CommentController::class, 'store'])->name('comment.store');
+
+    // 投稿データ取得用APIルート
+    Route::get('/api/posts/{id}', [PostController::class, 'showApi']);
+
+    // 投稿データ更新用APIルート
+    Route::patch('/api/posts/{id}', [PostController::class, 'updateApi']);
 
     // 投稿リソース用のルート
     Route::resource('post', PostController::class);

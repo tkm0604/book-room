@@ -9,6 +9,11 @@
     </x-slot>
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="mx-4 my-4 sm:p-8">
-            <div id="app"></div> <!-- Vue.jsをマウントするポイント -->
+            <div id="app">
+                <post-form
+                  :post-url="'{{ route('post.store') }}'"
+                  :is-edit="false"
+                ></post-form>
+              </div>
         </div>
 </x-app-layout>
