@@ -1,4 +1,7 @@
 import './bootstrap';
+import Alpine from 'alpinejs';
+window.Alpine = Alpine;
+Alpine.start();
 import { createApp } from 'vue';
 import PostForm from './components/PostForm.vue'; // 作成するVueコンポーネント
 import PostEdit from './components/PostEdit.vue'; // 投稿編集用

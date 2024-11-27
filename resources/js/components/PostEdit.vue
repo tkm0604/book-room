@@ -142,37 +142,38 @@
         }
       },
       async updatePost() {
-        this.validateField('title');
-        this.validateField('body');
-        this.validateField('image');
+  this.validateField('title');
+  this.validateField('body');
+  this.validateField('image');
 
-        if (this.hasErrors) return;
+  if (this.hasErrors) return;
 
-        const formData = new FormData();
-        formData.append('title', this.post.title);
-        formData.append('body', this.post.body);
-        if (this.post.image instanceof File) {
-          formData.append('image', this.post.image);
-        }
+  const formData = new FormData();
+  formData.append('title', this.post.title);
+  formData.append('body', this.post.body);
+  if (this.post.image instanceof File) {
+    formData.append('image', this.post.image);
+  }
+  formData.append('_method', 'PATCH'); // サーバー側でPATCHとして認識させる
 
-        try {
-          const response = await fetch(`/api/posts/${this.postId}`, {
-            method: 'POST',
-            headers: {
-              'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
-            },
-            body: formData,
-          });
-
-          if (!response.ok) throw new Error('投稿の更新に失敗しました');
-
-          alert('投稿が更新されました');
-          window.location.href = '/post/mypost';
-        } catch (error) {
-          console.error(error);
-          alert('更新中にエラーが発生しました');
-        }
+  try {
+    const response = await fetch(`/api/posts/${this.postId}`, {
+      method: 'POST', // 実際のリクエストはPOST
+      headers: {
+        'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
       },
+      body: formData,
+    });
+
+    if (!response.ok) throw new Error('投稿の更新に失敗しました');
+
+        alert('投稿が更新されました');
+        window.location.href = '/post/mypost';
+    } catch (error) {
+        console.error(error);
+        alert('更新中にエラーが発生しました');
+    }
+    },
     },
   };
   </script>
