@@ -36,7 +36,7 @@
                                 </h1>
                             </div>
                             <hr class="w-full">
-                            <p class="mt-4 text-gray-600 py-4 break-words">{{ Str::limit($post->body,100,'...') }}</p>
+                            <p class="mt-4 text-gray-600 py-4 break-words">{{ removeBookRoomTag(Str::limit($post->body,100,'...')) }}</p>
                             <div class="text-sm font-semibold flex flex-row-reverse">
                                 <p>{{ $post->user->name }} • {{ $post->created_at->diffForHumans() }}</p>
                             </div>

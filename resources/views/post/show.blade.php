@@ -40,7 +40,7 @@
                             </div>
                         </div>
                         <hr class="w-full">
-                        <p  class="mt-4 text-gray-600 py-4 break-words">{{ $post->body }}</p>
+                        <p  class="mt-4 text-gray-600 py-4 break-words">{{ removeBookRoomTag($post->body) }}</p>
                         @if ($post->image)
                             {{-- <div>
                               <p> {{ $post->image }}</p>
