@@ -14,7 +14,9 @@
           placeholder="本のタイトルを入力してください"
         />
         <p v-if="errors.title" class="text-red-500">{{ errors.title }}</p>
+        <p class="text-sm text-gray-500">文字数: {{ title.length }}/50</p>
       </div>
+
       <!-- 本文入力 -->
       <div class="mb-4">
         <label for="body" class="block text-sm font-medium text-gray-700">本文</label>
@@ -27,8 +29,15 @@
           rows="5"
           placeholder="この本の感想やおすすめポイントを書いてください"
         ></textarea>
+        <p class="text-sm text-gray-500">文字数: {{ body.length }}/150</p>
         <p v-if="errors.body" class="text-red-500">{{ errors.body }}</p>
       </div>
+
+      <!-- 画像プレビュー -->
+      <div v-if="imagePreview" class="mt-4">
+        <img :src="imagePreview" alt="画像プレビュー" style="max-width: 100%; max-height: 300px;" />
+      </div>
+
       <!-- 画像アップロード -->
       <div class="mb-4">
         <label for="image" class="block text-sm font-medium text-gray-700">本の表紙画像</label>
@@ -41,7 +50,7 @@
         />
         <p v-if="errors.image" class="text-red-500">{{ errors.image }}</p>
       </div>
-      <!-- 投稿ボタン -->
+
       <!-- 投稿ボタン -->
       <button
         type="submit"
@@ -49,9 +58,10 @@
         style="width: 100%; background-color: #3b82f6; color: white; padding: 8px 16px; border-radius: 4px; font-weight: bold;">
         投稿する
       </button>
+
       <p v-if="hasErrors" class="text-red-500 text-center mt-4">未入力の項目があります。入力内容を確認してください。</p>
     </form>
-</template>
+  </template>
 
 <script>
 export default {
@@ -79,43 +89,58 @@ export default {
       this.image = file;
 
       if (file) {
+        // プレビュー用のURLを作成
         this.imagePreview = URL.createObjectURL(file);
-        if (!file.type.match('image.*')) {
-          this.errors.image = '画像ファイルを選択してください';
-        } else if (file.size > 5120 * 1024) {
+
+        // ファイルタイプが指定された形式か確認
+        if (!file.type.match('image/jpeg') && !file.type.match('image/png') && !file.type.match('image/jpg')) {
+          this.errors.image = '画像フォーマットはJPEG, PNG, JPGのみです';
+        } else if (file.size > 5120 * 1024) { // 5MB
           this.errors.image = '画像サイズは5MB以内である必要があります';
         } else {
           this.errors.image = null;
         }
-      } else {
-        this.errors.image = '画像を選択してください';
       }
     },
+
     validateField(field) {
       if (field === 'title') {
         if (!this.title) {
           this.errors.title = 'タイトルは必須です';
-        } else if (this.title.length > 255) {
-          this.errors.title = 'タイトルは255文字以内で入力してください';
+        } else if (this.title.length > 50) {
+          this.errors.title = 'タイトルは50文字以内で入力してください';
         } else {
           this.errors.title = null;
         }
       } else if (field === 'body') {
         if (!this.body) {
           this.errors.body = '本文は必須です';
-        } else if (this.body.length > 130) {
-          this.errors.body = '本文は130文字以内で入力してください';
+        } else if (this.body.length > 150) {
+          this.errors.body = '本文は150文字以内で入力してください';
         } else {
           this.errors.body = null;
         }
       } else if (field === 'image') {
         if (!this.image) {
           this.errors.image = '画像は必須です';
+        } else if (!this.image.type.match('image/jpeg') && !this.image.type.match('image/png') && !this.image.type.match('image/jpg')) {
+          this.errors.image = '画像フォーマットはJPEG, PNG, JPGのみです';
+        } else if (this.image.size > 5120 * 1024) {
+          this.errors.image = '画像サイズは5MB以内である必要があります';
+        } else {
+          this.errors.image = null;
         }
       }
     },
+
     submitPost() {
-      // 全項目をチェック
+      // 本文末尾に#book-roomを追加
+      let finalBody = this.body;
+      if (this.body && !this.body.includes("#book-room")) {
+        finalBody += ' #book-room';  // 本文に自動的に#book-roomを追加
+      }
+
+      // バリデーション実行
       this.validateField('title');
       this.validateField('body');
       this.validateField('image');
@@ -124,13 +149,15 @@ export default {
         return;
       }
 
+      // フォームデータの作成
       const formData = new FormData();
       formData.append('title', this.title);
-      formData.append('body', this.body);
+      formData.append('body', finalBody);
       if (this.image) {
         formData.append('image', this.image);
       }
 
+      // 投稿の送信
       fetch('/post', {
         method: 'POST',
         headers: {
@@ -150,7 +177,7 @@ export default {
           this.body = '';
           this.image = null;
           this.imagePreview = null;
-          window.location.href = '/post/mypost';
+          window.location.href = '/post/mypost'; // 投稿後にリダイレクト
         })
         .catch((error) => {
           console.error('投稿に失敗しました', error);
@@ -160,16 +187,13 @@ export default {
 };
 </script>
 
-<style>
-.text-red-500 {
-  color: #f56565;
-  font-size: 0.875rem;
-  margin-top: 0.25rem;
-}
-.border-red-500 {
-  border-color: #f56565;
-}
-</style>
-
-
-
+  <style>
+  .text-red-500 {
+    color: #f56565;
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+  }
+  .border-red-500 {
+    border-color: #f56565;
+  }
+  </style>

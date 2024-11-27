@@ -42,9 +42,9 @@
                         <hr class="w-full">
                         <p  class="mt-4 text-gray-600 py-4 break-words">{{ $post->body }}</p>
                         @if ($post->image)
-                            <div>
+                            {{-- <div>
                               <p> {{ $post->image }}</p>
-                            </div>
+                            </div> --}}
                             <div>
                                 <img src="{{ $post->image }}" alt="画像">
                             </div>
