@@ -7,6 +7,11 @@
         {{-- 投稿時のメッセージを表示 --}}
         <x-message :message="session('message')" />
     </x-slot>
+    @if (session('error'))
+    <div class="alert alert-danger">
+        {{ session('error') }}
+    </div>
+@endif
 <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
     <div class="mx-4 sm:p-8">
         <form method="post" action="{{ route("post.update",$post) }}" enctype="multipart/form-data">
