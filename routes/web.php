@@ -22,6 +22,8 @@ Route::get('post/{post}', [PostController::class, 'show'])->name('post.show');
 // コメント用のルート
 Route::post('/post/comment/store', [CommentController::class, 'store'])->name('comment.store');
 
+// プライバシーポリシーページ
+Route::view('/site-policy', 'site-policy')->name('site-policy');
 
 //お問い合わせ
 Route::get('contact/create', [ContactController::class, 'create'])->name('contact.create');

@@ -30,6 +30,9 @@
                         <x-nav-link :href="route('contact.create')">
                             お問い合わせ
                         </x-nav-link>
+                        <x-nav-link :href="route('site-policy')">
+                            サイトポリシー
+                        </x-nav-link>
                         @can('admin')
                             <x-nav-link :href="route('profile.index')">
                                 ユーザー一覧
@@ -37,12 +40,15 @@
                         @endcan
 
                     </div>
-                    {{-- @else
+                    @else
                     <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
-                        <x-nav-link :href="route('post.mycomment')" :active="request()->routeIs('post.mypost')">
-                            お問い合わせ
+                        <x-nav-link :href="route('register')" :active="request()->routeIs('post.mypost')">
+                            アカウントの作成
                         </x-nav-link>
-                    </div> --}}
+                        <x-nav-link :href="route('site-policy')">
+                            サイトポリシー
+                        </x-nav-link>
+                    </div>
                 @endif
             </div>
 
@@ -149,6 +155,9 @@
                     <x-responsive-nav-link :href="route('post.mycomment')">
                         {{ __('自分のコメントした投稿') }}
                     </x-responsive-nav-link>
+                    <x-responsive-nav-link :href="route('site-policy')">
+                        {{ __('サイトポリシー') }}
+                    </x-responsive-nav-link>
                     @can('admin')
                     <x-responsive-nav-link :href="route('profile.index')">
                         {{ __('ユーザー一覧') }}
@@ -159,7 +168,7 @@
                         <x-responsive-nav-link :href="route('logout')"
                             onclick="event.preventDefault();
                                         this.closest('form').submit();">
-                            {{ __('Log Out') }}
+                            {{ __('ログアウト') }}
                         </x-responsive-nav-link>
                     </form>
                 @else
@@ -168,6 +177,9 @@
                     </x-responsive-nav-link>
                     <x-responsive-nav-link :href="route('register')">
                         {{ __('アカウントを作成') }}
+                    </x-responsive-nav-link>
+                    <x-responsive-nav-link :href="route('site-policy')">
+                        {{ __('サイトポリシー') }}
                     </x-responsive-nav-link>
                     <x-responsive-nav-link :href="route('contact.create')">
                         {{ __('お問い合わせ') }}
