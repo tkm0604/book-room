@@ -44,9 +44,15 @@
                         @else
                         <span>コメントはまだありません。</span>
                         @endif
+                        @if(auth()->check())
                         <a href="{{route('post.show', $post)}}" style="color:white;">
                             <x-primary-button class="float-right">コメントする</x-primary-button>
                      </a>
+                     @else
+                     <a href="javascript:void(0);" style="color:white;" onclick="alert('コメントするにはユーザー登録を行ってください')">
+                        <x-primary-button class="float-right">コメントする</x-primary-button>
+                    </a>
+                    @endif
                     </div>
                 </div>
             </div>

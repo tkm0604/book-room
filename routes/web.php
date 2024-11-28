@@ -9,6 +9,7 @@ use App\Http\Controllers\RoleController;
 use App\Http\Controllers\Auth\SocialAuthController;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Middleware\EnsureEmailIsVerified;
+
 // Route::get('/', function () {
 //     return view('welcome');
 // });
@@ -16,6 +17,10 @@ use App\Http\Middleware\EnsureEmailIsVerified;
 
 // TOPページを投稿一覧に設定
 Route::get('/', [PostController::class, 'index'])->name('home');
+// 投稿表示（全てのユーザーが閲覧可能）
+Route::get('post/{post}', [PostController::class, 'show'])->name('post.show');
+// コメント用のルート
+Route::post('/post/comment/store', [CommentController::class, 'store'])->name('comment.store');
 
 
 //お問い合わせ
@@ -38,8 +43,6 @@ Route::middleware(['auth', EnsureEmailIsVerified::class])->group(function () {
     Route::get('post/mypost', [PostController::class, 'mypost'])->name('post.mypost');
     //自分のコメント投稿のみ表示
     Route::get('post/mycomment', [PostController::class, 'mycomment'])->name('post.mycomment');
-    // コメント用のルート
-    Route::post('/post/comment/store', [CommentController::class, 'store'])->name('comment.store');
 
     // 投稿データ取得用APIルート
     Route::get('/api/posts/{id}', [PostController::class, 'showApi']);
@@ -48,7 +51,7 @@ Route::middleware(['auth', EnsureEmailIsVerified::class])->group(function () {
     Route::patch('/api/posts/{id}', [PostController::class, 'updateApi']);
 
     // 投稿リソース用のルート
-    Route::resource('post', PostController::class);
+    Route::resource('post', PostController::class)->except(['show']);
 });
 
 
@@ -58,7 +61,7 @@ Route::middleware(['auth', 'can:admin'])->group(function () {
     Route::patch('/profile/adupdate/{user}', [ProfileController::class, 'adupdate'])->name('profile.adupdate');
 
     Route::patch('role/{user}', [RoleController::class, 'attach'])->name('role.attach');
-    ROute::patch('role/{user}/detach', [RoleController::class, 'detach'])->name('role.detach');
+    Route::patch('role/{user}/detach', [RoleController::class, 'detach'])->name('role.detach');
 
     Route::delete('profile/{user}', [ProfileController::class, 'addestroy'])->name('profile.addestroy');
 });

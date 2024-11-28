@@ -42,9 +42,6 @@
                         <hr class="w-full">
                         <p  class="mt-4 text-gray-600 py-4 break-words">{{ removeBookRoomTag($post->body) }}</p>
                         @if ($post->image)
-                            {{-- <div>
-                              <p> {{ $post->image }}</p>
-                            </div> --}}
                             <div>
                                 <img src="{{ $post->image }}" alt="画像">
                             </div>
@@ -62,11 +59,17 @@
                         <textarea name="body"
                             class="bg-white w-full  rounded-2xl px-4 mt-4 py-4 shadow-lg hover:shadow-2xl transition duration-500"
                             id="body" cols="30" rows="3" placeholder="コメントを入力してください">{{ old('body') }}</textarea>
-                        <x-primary-button class="float-right mr-4 mb-12">コメントする</x-primary-button>
+                        @if(auth()->check())
+                            <x-primary-button class="float-right mr-4 mb-12">コメントする</x-primary-button>
+                        @else
+                            <a href="javascript:void(0);" style="color:white;"
+                                onclick="alert('コメントするにはユーザー登録を行ってください')">
+                                <x-primary-button class="float-right mr-4 mb-12">コメントする</x-primary-button>
+                            </a>
+                        @endif
                     </form>
                 </div>
                 {{-- コメント部分終わり --}}
-
                 {{-- コメント表示 --}}
                 @foreach ($post->comments as $comment)
                 <div class="bg-white w-full  rounded-2xl px-10 py-8 shadow-lg mt-8 whitespace-pre-line">
