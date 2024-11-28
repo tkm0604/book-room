@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Storage;
 use Abraham\TwitterOAuth\TwitterOAuth;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
-// use AWS\CRT\Log;
+
 
 class PostController extends Controller
 {
@@ -35,101 +35,58 @@ class PostController extends Controller
      * Store a newly created resource in storage.
      */
 
-    //  消すな！！
-    // public function store(Request $request)
-    // {
-
-    //         バリデーション
-    //         $input = $request->validate([
-    //             'title' => 'required|string|max:50', // 最大50文字に変更（Xへの投稿の文字数制限）
-    //             'body' => 'required|string|max:150', // 最大150文字に変更（Xへの投稿の文字数制限）
-    //             'image' => ['required', 'file', 'image', 'mimes:jpeg,png,jpg', 'max:5120'], // フォーマットとサイズ制限
-    //         ]);
-
-
-    //     $post = new Post();
-
-    //     $post->title = $request->title;
-    //     $post->body = $request->body;
-    //     $post->user_id = auth()->user()->id;
-    //     //画像の名前を取得
-    //     $original = $request->file('image')->getClientOriginalName();
-    //     //画像の名前を変更
-    //     $name = date('YmdHis') . '_' . $original;
-
-    //     // S3に画像をアップロード
-    //     $path = request()->file('image')->storeAs('images/post_images', $name, 's3');
-    //     // S3のURLを取得してDBに保存
-    //     $url = Storage::disk('s3')->url($path);
-    //     $post->image = $url;
-
-    //     // Postを保存
-    //     $post->save();
-
-    //     // 正しい画像パスを渡してTwitterに投稿
-    //     $tweetId = $this->postTweet($post->title, $post->body, $url);
-    //     Log::info('取得したツイートID: ' . json_encode($tweetId));
-
-    //     // ツイートIDが返ってきた場合、それをPostモデルに保存
-    //     if ($tweetId) {
-    //         $post->tweet_id = $tweetId;
-    //         if ($post->save()) {
-    //             Log::info('ツイートIDが正常に保存されました。');
-    //         } else {
-    //             Log::error('ツイートIDの保存に失敗しました。');
-    //         }
-    //     }
-
-    //     return redirect()->route('post.create')->with('message', '投稿を作成しました');
-    // }
-    //消すなここまで
-
     public function store(Request $request)
     {
-
-        try {
         // バリデーション
-        $input = $request->validate([
-            'title' => 'required|string|max:50', // 最大50文字に変更
-            'body' => 'required|string|max:150', // 最大150文字に変更
+        $request->validate([
+            'title' => 'required|string|max:50', // 最大50文字に変更（Xへの投稿の文字数制限）
+            'body' => 'required|string|max:150', // 最大150文字に変更（Xへの投稿の文字数制限）
             'image' => ['required', 'file', 'image', 'mimes:jpeg,png,jpg', 'max:5120'], // フォーマットとサイズ制限
         ]);
 
-            $post = new Post();
-            $post->title = $request->title;
-            $post->body = $request->body;
-            $post->user_id = auth()->user()->id;
 
-            $original = $request->file('image')->getClientOriginalName();
-            $name = date('YmdHis') . '_' . $original;
-            $path = $request->file('image')->storeAs('images/post_images', $name, 's3');
-            $url = Storage::disk('s3')->url($path);
-            $post->image = $url;
+        $post = new Post();
 
-            $post->save();
+        $post->title = $request->title;
+        $post->body = $request->body;
+        $post->user_id = auth()->user()->id;
+        //画像の名前を取得
+        $original = $request->file('image')->getClientOriginalName();
+        //画像の名前を変更
+        $name = date('YmdHis') . '_' . $original;
 
-            Log::info('投稿が成功しました', $post->toArray());
+        // S3に画像をアップロード
+        $path = request()->file('image')->storeAs('images/post_images', $name, 's3');
+        // S3のURLを取得してDBに保存
+        $url = Storage::disk('s3')->url($path);
+        $post->image = $url;
 
-            return response()->json([
-                'message' => '投稿が成功しました！',
-                'post' => $post,
-            ], 200);
+        // Postを保存
+        $post->save();
 
-        } catch (\Exception $e) {
-            Log::error('投稿エラー: ' . $e->getMessage());
+        // 正しい画像パスを渡してTwitterに投稿
+        $tweetId = $this->postTweet($post->title, $post->body, $url);
+        Log::info('取得したツイートID: ' . json_encode($tweetId));
 
-            return response()->json([
-                'message' => '投稿に失敗しました',
-                'error' => $e->getMessage(),
-            ], 500);
+        // ツイートIDが返ってきた場合、それをPostモデルに保存
+        if ($tweetId) {
+            $post->tweet_id = $tweetId;
+            if ($post->save()) {
+                Log::info('ツイートIDが正常に保存されました。');
+            } else {
+                Log::error('ツイートIDの保存に失敗しました。');
+            }
         }
-    }
 
+        return response()->json([
+            'redirect' => route('post.mypost'),
+            'message' => '投稿を作成しました',
+        ], 200);
+    }
 
     /**
      * Xへの投稿処理関数
      */
-
     public function postTweet($title, $body, $imagePath)
     {
         $user = auth()->user();
@@ -242,49 +199,134 @@ class PostController extends Controller
         return response()->json($post); // JSON形式で返す
     }
 
+    // public function updateApi(Request $request, $id)
+    // {
+    //     // 投稿を取得
+    //     $post = Post::findOrFail($id);
+    //     // ポリシーを使用して認可
+    //     if ($request->user()->cannot('update', $post)) {
+    //         abort(403);
+    //     }
+
+    //     // バリデーション
+    //     $validated = $request->validate([
+    //         'title' => 'required|string|max:50', // 最大50文字に変更（Xへの投稿の文字数制限）
+    //         'body' => 'required|string|max:150', // 最大150文字に変更（Xへの投稿の文字数制限）
+    //         'image' => ['required', 'file', 'image', 'mimes:jpeg,png,jpg', 'max:5120'], // フォーマットとサイズ制限
+    //     ]);
+
+    //     // タイトルと本文の更新
+    //     $post->title = $validated['title'];
+    //     $post->body = $validated['body'];
+
+    //     // 画像がアップロードされた場合の処理
+    //     if ($request->file('image')) {
+    //         $original = $request->file('image')->getClientOriginalName(); // 画像の元の名前を取得
+    //         $name = date('YmdHis') . '_' . $original; // 名前を一意に変更
+    //         $path = $request->file('image')->storeAs('images/post_images', $name, 's3'); // S3にアップロード
+    //         $url = Storage::disk('s3')->url($path); // アップロードされた画像のURLを取得
+
+    //         // 古い画像を削除
+    //         if ($post->image) {
+    //             $oldImagePath = parse_url($post->image, PHP_URL_PATH); // 古い画像のパスを抽出
+    //             $oldImagePath = ltrim($oldImagePath, '/'); // 先頭のスラッシュを削除
+    //             Storage::disk('s3')->delete($oldImagePath); // S3から古い画像を削除
+    //         }
+
+    //         // 新しい画像のURLを保存
+    //         $post->image = $url;
+    //     }
+
+    //     // 古いツイートを削除
+    //     if ($post->tweet_id) {
+    //         Log::info("削除対象のツイートID: {$post->tweet_id}");
+    //         if (!$this->deleteTweet($post->tweet_id)) {
+    //             Log::error("ツイート削除に失敗しました: {$post->tweet_id}");
+    //             return response()->json(['error' => 'ツイート削除に失敗しました。もう一度試してください。'], 500);
+    //         }
+    //         Log::info("ツイート削除に成功しました: {$post->tweet_id}");
+    //     }
+
+    //     // 新しいツイートを作成
+    //     Log::info("新しいツイートを作成します: タイトル = {$post->title}, 本文 = {$post->body}");
+    //     $newTweetId = $this->postTweet($post->title, $post->body, $post->image);
+
+    //     if ($newTweetId) {
+    //         $post->tweet_id = $newTweetId;
+    //         Log::info("新しいツイートが作成されました: {$newTweetId}");
+    //     } else {
+    //         Log::error("新しいツイートの作成に失敗しました");
+    //         return response()->json(['error' => '新しいツイートの作成に失敗しました。'], 500);
+    //     }
+
+    //     // 投稿を保存
+    //     if ($post->save()) {
+    //         Log::info("投稿が正常に保存されました。投稿ID: {$post->id}");
+    //     } else {
+    //         Log::error("投稿の保存に失敗しました。投稿ID: {$post->id}");
+    //         return response()->json(['error' => '投稿の保存に失敗しました。'], 500);
+    //     }
+
+    //     // JSONレスポンスを返す
+    //     return response()->json(['message' => '投稿が更新されました'], 200);
+    // }
+
+    /**
+     * Update the specified resource in storage.
+     */
+
     public function updateApi(Request $request, $id)
     {
-        // 投稿を取得
-        $post = Post::findOrFail($id);
+        try {
+            // 投稿を取得
+            $post = Post::findOrFail($id);
+            Log::info("取得した投稿: " . json_encode($post->toArray()));
 
-        // バリデーション
-        $validated = $request->validate([
-            'title' => 'required|string|max:255',
-            'body' => 'required|string|max:150',
-            'image' => 'nullable|image|mimes:jpeg,png,jpg|max:5120',
-        ]);
-
-        // タイトルと本文の更新
-        $post->title = $validated['title'];
-        $post->body = $validated['body'];
-
-        // 画像がアップロードされた場合の処理
-        if ($request->file('image')) {
-            $original = $request->file('image')->getClientOriginalName(); // 画像の元の名前を取得
-            $name = date('YmdHis') . '_' . $original; // 名前を一意に変更
-            $path = $request->file('image')->storeAs('images/post_images', $name, 's3'); // S3にアップロード
-            $url = Storage::disk('s3')->url($path); // アップロードされた画像のURLを取得
-
-            // 古い画像を削除
-            if ($post->image) {
-                $oldImagePath = parse_url($post->image, PHP_URL_PATH); // 古い画像のパスを抽出
-                $oldImagePath = ltrim($oldImagePath, '/'); // 先頭のスラッシュを削除
-                Storage::disk('s3')->delete($oldImagePath); // S3から古い画像を削除
+            // ポリシーを使用して認可
+            if ($request->user()->cannot('update', $post)) {
+                abort(403);
             }
 
-            // 新しい画像のURLを保存
-            $post->image = $url;
+            // バリデーション
+            $validated = $request->validate([
+                'title' => 'required|string|max:50',
+                'body' => 'required|string|max:150',
+                'image' => ['nullable', 'file', 'image', 'mimes:jpeg,png,jpg', 'max:5120'],
+            ]);
+
+            // タイトルと本文の更新
+            $post->title = $validated['title'];
+            $post->body = $validated['body'];
+
+            // 画像がアップロードされた場合の処理
+            if ($request->file('image')) {
+                $original = $request->file('image')->getClientOriginalName();
+                $name = date('YmdHis') . '_' . $original;
+                $path = $request->file('image')->storeAs('images/post_images', $name, 's3');
+                $url = Storage::disk('s3')->url($path);
+
+                if ($post->image) {
+                    $oldImagePath = parse_url($post->image, PHP_URL_PATH);
+                    if ($oldImagePath) {
+                        $oldImagePath = ltrim($oldImagePath, '/');
+                        Storage::disk('s3')->delete($oldImagePath);
+                    } else {
+                        Log::warning("古い画像のパスが取得できませんでした: {$post->image}");
+                    }
+                }
+
+                $post->image = $url;
+            }
+
+            $post->save();
+
+            // JSONレスポンスを返す
+            return response()->json(['message' => '投稿が更新されました'], 200);
+        } catch (\Exception $e) {
+            Log::error('投稿更新中に例外が発生しました: ' . $e->getMessage());
+            return response()->json(['error' => '投稿の更新中にエラーが発生しました。'], 500);
         }
-
-        // 投稿を保存
-        $post->save();
-
-        // JSONレスポンスを返す
-        return response()->json(['message' => '投稿が更新されました'], 200);
     }
-
-
-
 
 
 
@@ -299,118 +341,6 @@ class PostController extends Controller
         }
 
         return view('post.edit', compact('post'));
-    }
-
-
-    /**
-     * Update the specified resource in storage.
-     */
-    // public function update(Request $request, Post $post)
-    // {
-    //     // ポリシーを使用して認可
-    //     if ($request->user()->cannot('update', $post)) {
-    //         abort(403);
-    //     }
-
-    //     // 入力バリデーション
-    //     $input = $request->validate([
-    //         'title' => 'required|string|max:255',
-    //         'body' => 'required|string|max_mb_chars:130', // Xへの投稿の文字数制限
-    //         'image' => ['nullable', 'file', 'image', 'mimes:jpeg,png,jpg', 'max:5120'], // 画像のバリデーション
-    //     ]);
-
-    //     // タイトルと本文の更新
-    //     $post->title = $input['title'];
-    //     $post->body = $input['body'];
-
-    //     // 画像の更新処理
-    //     if ($request->file('image')) {
-    //         $original = $request->file('image')->getClientOriginalName();
-    //         $name = date('YmdHis') . '_' . $original;
-
-    //         // S3に画像をアップロード
-    //         $path = $request->file('image')->storeAs('images/post_images', $name, 's3');
-    //         $url = Storage::disk('s3')->url($path);
-
-    //         // 古い画像を削除
-    //         if ($post->image) {
-    //             $oldImagePath = ltrim(parse_url($post->image, PHP_URL_PATH), '/');
-    //             Storage::disk('s3')->delete($oldImagePath);
-    //         }
-
-    //         // 新しい画像のURLをセット
-    //         $post->image = $url;
-    //     }
-
-    //     // 古いツイートを削除
-    //     if ($post->tweet_id) {
-    //         Log::info("削除対象のツイートID: {$post->tweet_id}");
-    //         if (!$this->deleteTweet($post->tweet_id)) {
-    //             return redirect()->back()->with('error', 'ツイート削除に失敗しました。もう一度試してください。');
-    //         }
-    //         Log::info("ツイート削除に成功しました: {$post->tweet_id}");
-    //     }
-
-    //     // 新しいツイートを作成
-    //     Log::info("新しいツイートを作成します: タイトル = {$post->title}, 本文 = {$post->body}");
-    //     $newTweetId = $this->postTweet($post->title, $post->body, $post->image);
-
-    //     if ($newTweetId) {
-    //         $post->tweet_id = $newTweetId;
-    //         Log::info("新しいツイートが作成されました: {$newTweetId}");
-    //     } else {
-    //         Log::error("新しいツイートの作成に失敗しました");
-    //         return redirect()->back()->with('error', '新しいツイートの作成に失敗しました。');
-    //     }
-
-    //     // 投稿を保存
-    //     if ($post->save()) {
-    //         Log::info("投稿が正常に保存されました。投稿ID: {$post->id}");
-    //     } else {
-    //         Log::error("投稿の保存に失敗しました。投稿ID: {$post->id}");
-    //         return redirect()->back()->with('error', '投稿の保存に失敗しました。');
-    //     }
-
-    //     return redirect()->route('post.show', $post)->with('message', '投稿を更新しました');
-    // }
-
-    private function deleteTweet($tweetId)
-    {
-        Log::info("削除対象のツイートID: " . $tweetId);
-
-        if (!$tweetId) {
-            Log::warning('ツイートIDが指定されていません。削除処理をスキップします。');
-            return false;
-        }
-
-        $user = auth()->user();
-        $twitter = new TwitterOAuth(
-            env('TWITTER_CLIENT_ID'),
-            env('TWITTER_CLIENT_SECRET'),
-            $user->twitter_token,
-            $user->twitter_token_secret
-        );
-
-        try {
-            // ツイート削除リクエスト
-            $twitter->post("statuses/destroy/$tweetId", []);
-            $httpCode = $twitter->getLastHttpCode(); // TwitterOAuthオブジェクトから直接取得
-            Log::info('削除リクエストHTTPコード: ' . $httpCode);
-
-            if ($httpCode === 200) {
-                Log::info("ツイート削除に成功しました: {$tweetId}");
-                return true;
-            } elseif ($httpCode === 404) {
-                Log::warning("削除対象のツイートが存在しません（または既に削除済み）: {$tweetId}");
-                return true; // すでに削除されている場合は成功として扱う
-            } else {
-                Log::error("ツイート削除に失敗しました。HTTPコード: {$httpCode}");
-                return false;
-            }
-        } catch (\Exception $e) {
-            Log::error("ツイート削除中に例外が発生しました。エラー: " . $e->getMessage());
-            return false;
-        }
     }
 
 
@@ -433,20 +363,9 @@ class PostController extends Controller
         }
 
 
-        // ツイート削除処理
-        if ($post->tweet_id) {
-            $deleteSuccess = $this->deleteTweet($post->tweet_id);
-            if (!$deleteSuccess) {
-                return redirect()->back()->with('error', 'ツイート削除に失敗しました。');
-            }
-        }
-
-
         $post->comments()->delete();
         $post->delete();
 
-
-        Log::info("投稿が削除されました: ID = {$post->id}");
 
         return redirect()->route('home')->with('message', '投稿を削除しました');
     }

@@ -7,16 +7,6 @@
     </x-slot>
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="mx-4 sm:p-8">
-            {{-- //ログインユーザーの時 --}}
-            {{-- @if (auth()->check())
-            <p class="mx-1 my-1">{{ $user->name }}さん</p>
-        @else --}}
-            {{-- ゲストの時 --}}
-            {{-- <p class="mx-1 my-1 font-bold">ゲストユーザー</p>
-            <p class="text-base text-sm">Xからのアカウント登録で投稿の作成が可能です。
-                <span class="font-bold text-sky-700">投稿の作成にはアカウント登録が必須です。</span>
-            </p>
-        @endif --}}
             @if (count($posts) == 0)
                 <p class="mt-4">
                     あなたはまだ投稿していません。
