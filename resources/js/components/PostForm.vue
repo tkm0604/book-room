@@ -153,7 +153,7 @@ export default {
       // 本文末尾に#book-roomを追加
       let finalBody = this.body;
       if (this.body && !this.body.includes("#book-room")) {
-        finalBody += ' #book-room';  // 本文に自動的に#book-roomを追加
+        finalBody += ' #bookroom';  // 本文に自動的に#book-roomを追加
       }
 
             // ボタンを無効化

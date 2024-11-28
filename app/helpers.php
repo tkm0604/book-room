@@ -6,6 +6,6 @@ if (!function_exists('removeBookRoomTag')) {
      */
     function removeBookRoomTag($text)
     {
-        return preg_replace('/\s?#book-room\s?/i', '', $text);
+        return preg_replace('/\s?#bookroom\s?/i', '', $text);
     }
 }

@@ -14,6 +14,7 @@ class Post extends Model
         'body',
         'image',
         'user_id',
+        'tweet_id',
     ];
 
     public function user()

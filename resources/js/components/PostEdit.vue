@@ -176,14 +176,18 @@
       body: formData,
     });
 
-    if (!response.ok) throw new Error('投稿の更新に失敗しました');
-
-        alert('投稿が更新されました');
-        window.location.href = '/post/mypost';
-    } catch (error) {
-        console.error(error);
-        alert('更新中にエラーが発生しました');
+    if (!response.ok) {
+      const errorText = await response.text(); // レスポンス本文を取得
+      console.error('Error response:', errorText);
+      throw new Error('投稿の更新に失敗しました');
     }
+
+    alert('投稿が更新されました');
+    window.location.href = '/post/mypost';
+} catch (error) {
+    console.error(error);
+    alert('更新中にエラーが発生しました');
+}
     },
     },
   };
