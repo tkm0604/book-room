@@ -52,12 +52,28 @@
       </div>
 
       <!-- 投稿ボタン -->
-      <button
+      <!-- <button
         type="submit"
         :disabled="hasErrors"
         style="width: 100%; background-color: #3b82f6; color: white; padding: 8px 16px; border-radius: 4px; font-weight: bold;">
         投稿する
-      </button>
+      </button> -->
+
+
+<button
+  type="submit"
+  :disabled="hasErrors || isSubmitting"
+  :style="{
+    width: '100%',
+    backgroundColor: isSubmitting ? '#d1d5db' : '#3b82f6',
+    color: 'white',
+    padding: '8px 16px',
+    borderRadius: '4px',
+    fontWeight: 'bold',
+  }">
+  {{ isSubmitting ? '投稿中...' : '投稿する' }}
+</button>
+
 
       <p v-if="hasErrors" class="text-red-500 text-center mt-4">未入力の項目があります。入力内容を確認してください。</p>
     </form>
@@ -76,6 +92,7 @@ export default {
         body: null,
         image: null,
       },
+      isSubmitting: false, // ボタンの送信状態を管理
     };
   },
   computed: {
@@ -102,7 +119,6 @@ export default {
         }
       }
     },
-
     validateField(field) {
       if (field === 'title') {
         if (!this.title) {
@@ -140,6 +156,9 @@ export default {
         finalBody += ' #book-room';  // 本文に自動的に#book-roomを追加
       }
 
+            // ボタンを無効化
+            this.isSubmitting = true;
+
       // バリデーション実行
       this.validateField('title');
       this.validateField('body');
@@ -167,7 +186,7 @@ export default {
       })
         .then((response) => {
           if (!response.ok) {
-            throw new Error('Network response was not ok');
+            throw new Error('サーバーエラーが発生しました');
           }
           return response.json();
         })

@@ -55,10 +55,17 @@
       <!-- 更新ボタン -->
       <button
         type="submit"
-        :disabled="hasErrors"
-        style="width: 100%; background-color: #3b82f6; color: white; padding: 8px 16px; border-radius: 4px; font-weight: bold;">
-        更新する
-      </button>
+        :disabled="hasErrors || isUpdating"
+        :style="{
+            width: '100%',
+            backgroundColor: isUpdating ? '#d1d5db' : '#3b82f6',
+            color: 'white',
+            padding: '8px 16px',
+            borderRadius: '4px',
+            fontWeight: 'bold',
+        }">
+        {{ isUpdating ? '更新中...' : '更新する' }}
+        </button>
 
       <p v-if="hasErrors" class="text-red-500 text-center mt-4">未入力の項目があります。入力内容を確認してください。</p>
     </form>
@@ -82,6 +89,7 @@
           body: null,
           image: null,
         },
+        isUpdating: false, // 更新ボタンの送信状態を管理
       };
     },
     computed: {
@@ -142,6 +150,9 @@
         }
       },
       async updatePost() {
+              // 更新ボタンを無効化
+      this.isUpdating = true;
+
   this.validateField('title');
   this.validateField('body');
   this.validateField('image');
