@@ -17,18 +17,14 @@ use App\Http\Middleware\EnsureEmailIsVerified;
 
 // TOPページを投稿一覧に設定
 Route::get('/', [PostController::class, 'index'])->name('home');
-// 投稿表示（全てのユーザーが閲覧可能）
-Route::get('post/{post}', [PostController::class, 'show'])->name('post.show');
-// コメント用のルート
-Route::post('/post/comment/store', [CommentController::class, 'store'])->name('comment.store');
 
 // プライバシーポリシーページ
-Route::view('/site-policy', 'site-policy')->name('site-policy');
-
+Route::view('/privacy-policy', 'privacy-policy')->name('site-policy');
 //お問い合わせ
 Route::get('contact/create', [ContactController::class, 'create'])->name('contact.create');
 Route::post('contact/store', [ContactController::class, 'store'])->name('contact.store');
 
+//管理者用ユーザーのプロフィール編集画面
 Route::middleware(['auth', 'can:admin'])->group(function () {
     Route::get('profile/index', [ProfileController::class, 'index'])->name('profile.index');
 });
@@ -53,9 +49,13 @@ Route::middleware(['auth', EnsureEmailIsVerified::class])->group(function () {
     Route::patch('/api/posts/{id}', [PostController::class, 'updateApi']);
 
     // 投稿リソース用のルート
-    Route::resource('post', PostController::class)->except(['show']);
+    Route::resource('post', PostController::class)->except('post.show');
 });
 
+// 投稿表示（全てのユーザーが閲覧可能）
+Route::get('post/{post}', [PostController::class, 'show'])->name('post.show');
+// コメント用のルート
+Route::post('/post/comment/store', [CommentController::class, 'store'])->name('comment.store');
 
 // 管理者用のプロフィールルート
 Route::middleware(['auth', 'can:admin'])->group(function () {
