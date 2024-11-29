@@ -19,7 +19,7 @@ use App\Http\Middleware\EnsureEmailIsVerified;
 Route::get('/', [PostController::class, 'index'])->name('home');
 
 // プライバシーポリシーページ
-Route::view('/privacy-policy', 'privacy-policy')->name('site-policy');
+Route::view('/site-policy', 'site-policy')->name('site-policy');
 //お問い合わせ
 Route::get('contact/create', [ContactController::class, 'create'])->name('contact.create');
 Route::post('contact/store', [ContactController::class, 'store'])->name('contact.store');
