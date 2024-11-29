@@ -8,7 +8,7 @@
         <x-message :message="session('message')" />
     </x-slot>
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="mx-4 my-4 sm:p-8">
+        <div class="my-4 sm:p-8">
             <div id="app">
                 <post-form
                   :post-url="'{{ route('post.store') }}'"

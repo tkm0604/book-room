@@ -12,39 +12,46 @@
                     あなたはまだ投稿していません。
                 </p>
             @else
-                @foreach ($posts as $post)
-                <div class="mt-4">
-                    <div class="bg-white w-full  rounded-2xl px-10 py-8 shadow-lg hover:shadow-2xl transition duration-500">
-                        <div class="mt-4">
-                            <div class="flex">
-                                <div class="rounded-full w-12 h-12">
-                                    {{-- アバター表示 --}}
-                                    <img src="{{ isset($post->user) && $post->user->avatar !== 'user_default.jpg' ? asset($post->user->avatar) : asset('storage/avatar/user_default.jpg') }}">
-                                </div>
-                                <h1 class="text-lg text-gray-700 font-semibold hover:underline cursor-pointer float-left pt-4">
-                                    <a href="{{route('post.show', $post)}}">{{ $post->title }}</a>
-                                </h1>
-                            </div>
-                            <hr class="w-full">
-                            <p class="mt-4 text-gray-600 py-4 break-words">{{ removeBookRoomTag(Str::limit($post->body,100,'...')) }}</p>
-                            <div class="text-sm font-semibold flex flex-row-reverse">
-                                <p>{{ $post->user->name }} • {{ $post->created_at->diffForHumans() }}</p>
-                            </div>
-                            <hr class="w-full mb-2">
-                            @if($post->comments->count())
-                            <span class="badge">
-                                返信{{ $post->comments->count() }}件
-                            </span>
-                            @else
-                            <span>コメントはまだありません。</span>
+            <div class="card-wrap my-8">
+            @foreach ($posts as $post)
+                <div class="card s.shadow-lg">
+                    <a class="card-link" href="{{ route('post.show', $post )}}">
+                        <div class="card-user">
+                            <img class="card-user__avatar" src="{{ isset($post->user) && $post->user->avatar !== 'user_default.jpg' ? asset($post->user->avatar) : asset('storage/avatar/user_default.jpg')}}">
+                            <p class="card-user__name">{{ $post->user->name }}</p>
+                        </div>
+                        <div class="card-content">
+                            <p class="card-content__date">投稿日:{{ $post->created_at->diffForHumans() }}</p>
+                            <p class="card-content__title">{{ $post->title }}</p>
+                            <p class="card-content__body">{{ removeBookRoomTag(Str::limit($post->body, 50, '...')) }}</p>
+                            <img class="card-content__img" src="{{ $post->image }}" alt="">
+                        </div>
+                    </a>
+                    <div class="card-bottom">
+                        @if (auth()->check())
+                            <a class="card-button" href="{{ route('post.show', $post) }}">
+                                <button class="">コメントする</button>
+                            </a>
+                        @else
+                            {{-- 未ログインの場合はアラートを表示して遷移を防ぐ --}}
+                            <a href="javascript:void(0);" class="card-button" onclick="return showAlert();">
+                                <button class="">コメントする</button>
+                            </a>
+                        @endif
+                        <div class="card-content__badges">
+                            @if ($post->comments->count())
+                                <span class="badge">
+                                    返信{{ $post->comments->count() }}件
+                                </span>
                             @endif
-                            <a href="{{route('post.show', $post)}}" style="color:white;">
-                                <x-primary-button class="float-right">コメントする</x-primary-button>
-                         </a>
+                            <span class="badge-visits">
+                                閲覧回数10
+                            </span>
                         </div>
                     </div>
                 </div>
-        @endforeach
+            @endforeach
+        </div>
         @endif
 
     </div>

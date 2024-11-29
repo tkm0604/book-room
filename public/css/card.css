@@ -1,0 +1,214 @@
+.card-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+@media screen and (max-width: 768px) {
+    .card-wrap {
+        flex-direction: column;
+    }
+}
+
+.card {
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    width: calc((100% - 40px) / 3);
+}
+
+@media screen and (max-width: 768px) {
+    .card {
+        width: 100%;
+
+    }
+}
+
+.card-user {
+    width: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.card-user__avatar {
+    max-width: 40px;
+    width: 100%;
+    margin-right: 5px;
+    border-radius: 100%;
+}
+
+.card-user__name {
+    font-size: 1rem;
+}
+
+.card-content__date {
+    font-size: .9rem;
+    color: #999;
+}
+
+.card-content {
+    width: 100%;
+    margin-top: 5px;
+    position: relative;
+}
+
+.card-content__title {
+    font-size: 1rem;
+}
+
+.card-content__body {
+    font-size: 1rem;
+}
+
+.card-bottom {
+    margin-top: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 5px;
+}
+
+.card-content__badges {
+    display: flex;
+    justify-content: end;
+}
+
+.badge-visits {
+    margin-left: 3px;
+}
+
+.card-button {
+    background: #374151;
+    color: #fff;
+    font-size: 0.8rem;
+    padding: .2rem .6rem;
+    border-radius: .4rem;
+}
+
+
+
+/* 投稿個別表示レイアウト */
+.card.post-show {
+    width: 100%;
+    max-width: 890px;
+    margin: 0 auto;
+}
+
+.post-show .card-content__wrapImg {
+    margin: .2rem auto 0;
+    /* padding: 1rem; */
+    /* background-image: url('/storage/common/book_bg.jpeg'); */
+}
+
+.post-show .card-content__img {
+    margin: 0 auto;
+}
+
+.post-show .card-bottom {
+    justify-content: flex-end;
+}
+
+.post-show .card-button {
+    margin-top: 10px;
+    display: block;
+    width: fit-content;
+    margin-left: auto;
+}
+
+/* 吹き出し */
+/*以下、①背景色など*/
+
+
+/*以下、②左側のコメント*/
+.balloon6 {
+    width: 100%;
+    margin: 10px 0;
+    overflow: hidden;
+    display: flex;
+    text-align: left;
+}
+
+.balloon6 .faceicon {
+    margin-right: -50px;
+    width: 40px;
+}
+
+.balloon6 .faceicon img {
+    width: 100%;
+    height: auto;
+    border-radius: 50%;
+}
+
+.balloon6 .chatting {
+    width: 100%;
+    text-align: left;
+    width: 100%;
+    text-align: left;
+    margin-left: 15px;
+    margin-top: 10px;
+
+}
+
+.says {
+    position: relative;
+    margin: 0 0 0 50px;
+    padding: 10px;
+    border-radius: 12px;
+    background: #fff;
+    width:  fit-content;
+}
+
+.says:after {
+    content: "";
+    display: inline-block;
+    position: absolute;
+    top: 3px;
+    left: -19px;
+    border: 8px solid transparent;
+    border-right: 18px solid #fff;
+    ;
+    -webkit-transform: rotate(35deg);
+    transform: rotate(35deg);
+}
+
+.says-date {
+    margin-top: 5px;
+    font-size: .6rem;
+}
+
+
+/* 右コメント */
+.balloon6.reverse {
+    flex-direction: row-reverse;
+}
+
+.balloon6.reverse .faceicon {
+    margin-left: -50px;
+    margin-right: 0;
+}
+
+.balloon6.reverse .chatting {
+    margin-right: 15px;
+    margin-left: 0;
+    text-align: right;
+}
+
+.balloon6.reverse .chatting .says {
+    margin-left: auto;
+    margin-right: 50px;
+}
+
+
+.balloon6.reverse .says:after {
+    right: -19px;
+    left: auto;
+    border: 8px solid transparent;
+    border-left: 18px solid #fff;
+    transform: rotate(-35deg);
+}
+
+.balloon6.reverse .says-date {
+width: fit-content;
+margin-left: auto;
+}
