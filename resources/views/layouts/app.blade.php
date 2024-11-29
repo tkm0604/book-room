@@ -13,6 +13,8 @@
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+        <!-- 追加したjsファイル -->
+        <script src="{{ asset('js/script.js') }}"></script>
         <!-- 追加したcssファイル -->
         <link rel="stylesheet" href="{{ asset('css/forum.css') }}">
     </head>

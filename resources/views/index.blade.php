@@ -49,7 +49,8 @@
                             <x-primary-button class="float-right">コメントする</x-primary-button>
                      </a>
                      @else
-                     <a href="javascript:void(0);" style="color:white;" onclick="alert('コメントするにはユーザー登録を行ってください')">
+                     {{-- 未ログインの場合はアラートを表示して遷移を防ぐ --}}
+                     <a href="javascript:void(0);" style="color:white;" onclick="return showAlert();">
                         <x-primary-button class="float-right">コメントする</x-primary-button>
                     </a>
                     @endif

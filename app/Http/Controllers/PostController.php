@@ -189,6 +189,11 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
+        //未ログインユーザーの場合はエラーを返す
+        if(!auth()->check()){
+            return back()->with('message','ログインしてください');
+        }
+
         return view('post.show', compact('post'));
     }
 

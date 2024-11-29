@@ -28,6 +28,10 @@ class CommentController extends Controller
      */
     public function store(Request $request)
     {
+        //未ログインユーザーの場合はエラーを返す
+        if(!auth()->check()){
+            return back()->with('error','ログインしてください');
+        }
 
         $inputs=request()->validate([
             'body'=>'required|max:1000',

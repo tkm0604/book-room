@@ -53,20 +53,13 @@
                 </div>
                 {{-- コメント部分 --}}
                 <div class="mt-4 mb-12">
-                    <form method="post" action="{{ route('comment.store') }}">
+                    <form method="post" action="{{ route('comment.store') }}" @if(!auth()->check()) onsubmit="return showAlert();" @endif>
                         @csrf
                         <input type="hidden" name='post_id' value="{{ $post->id }}">
                         <textarea name="body"
                             class="bg-white w-full  rounded-2xl px-4 mt-4 py-4 shadow-lg hover:shadow-2xl transition duration-500"
                             id="body" cols="30" rows="3" placeholder="コメントを入力してください">{{ old('body') }}</textarea>
-                        @if(auth()->check())
                             <x-primary-button class="float-right mr-4 mb-12">コメントする</x-primary-button>
-                        @else
-                            <a href="javascript:void(0);" style="color:white;"
-                                onclick="alert('コメントするにはユーザー登録を行ってください')">
-                                <x-primary-button class="float-right mr-4 mb-12">コメントする</x-primary-button>
-                            </a>
-                        @endif
                     </form>
                 </div>
                 {{-- コメント部分終わり --}}
