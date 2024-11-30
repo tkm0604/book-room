@@ -31,9 +31,10 @@
 }
 
 .card-user__avatar {
-    max-width: 40px;
-    width: 100%;
-    margin-right: 5px;
+    width: 2rem;
+    height: 2rem;
+    object-fit: cover;
+    /* margin-right: 5px; */
     border-radius: 100%;
 }
 
@@ -134,11 +135,11 @@
     width: 40px;
 }
 
-.balloon6 .faceicon img {
+/* .balloon6 .faceicon img {
     width: 100%;
     height: auto;
     border-radius: 50%;
-}
+} */
 
 .balloon6 .chatting {
     width: 100%;
@@ -156,7 +157,7 @@
     padding: 10px;
     border-radius: 12px;
     background: #fff;
-    width:  fit-content;
+    width: fit-content;
 }
 
 .says:after {
@@ -209,6 +210,6 @@
 }
 
 .balloon6.reverse .says-date {
-width: fit-content;
-margin-left: auto;
+    width: fit-content;
+    margin-left: auto;
 }

@@ -19,10 +19,13 @@
         </div>
         <!-- Avatar -->
         <div class="mt-4">
+            {{-- プレビュー用の画像がここに表示されます --}}
+            <img id="avatar-preview" class="rounded-full w-24 h-24 object-cover"
+                src="{{ asset('storage/avatar/user_default.jpg') }}" alt="">
             <x-input-label for="avatar" :value="__('プロフィール画像（任意・5MBまで）')" />
 
             <x-text-input id="avatar" class="block mt-1 w-full rounded-none" type="file" name="avatar"
-                :value="old('avatar')" />
+                :value="old('avatar')" onchange="previewAvatar(event)" />
         </div>
         <!-- Password -->
         <div class="mt-4">
@@ -30,7 +33,10 @@
 
             <x-text-input id="password" class="block mt-1 w-full" type="password" name="password" required
                 autocomplete="new-password" />
-
+            <!-- パスワードルールの説明 -->
+            <p class="text-sm text-gray-600 mt-1">
+                パスワードは8文字以上で、大文字と小文字を含む必要があります。
+            </p>
             <x-input-error :messages="$errors->get('password')" class="mt-2" />
         </div>
 
@@ -55,15 +61,38 @@
             </x-primary-button>
         </div>
     </form>
-            <!-- Xでログイン -->
-            <div class="block mt-4">
-                <label for="" class="inline-flex items-center">
-                    <span class="ms-2 text-sm text-gray-600">
-                        <a href="{{route('twitter.redirect') }}" class="btn btn-primary flex items-center">
-                            <img style="width:40px" src="{{ asset('logo/x_logo.png') }}" alt="">
-                            Xで登録
-                        </a>
-                    </span>
-                </label>
-            </div>
+    <!-- Xでログイン -->
+    <div class="block mt-4">
+        <label for="" class="inline-flex items-center">
+            <span class="ms-2 text-sm text-gray-600">
+                <a href="{{ route('twitter.redirect') }}" class="btn btn-primary flex items-center">
+                    <img style="width:40px" src="{{ asset('storage/common/x_logo.png') }}" alt="">
+                    Xアカウントでログイン
+                </a>
+            </span>
+        </label>
+    </div>
 </x-guest-layout>
+<script>
+    function previewAvatar(event) {
+        const input = event.target;
+        const preview = document.getElementById('avatar-preview');
+
+        if (input.files && input.files[0]) {
+            const reader = new FileReader();
+
+            reader.onload = function(e) {
+                // プレビュー用の画像のsrcをセット
+                preview.src = e.target.result;
+                // hiddenクラスを削除して表示
+                preview.classList.remove('hidden');
+            };
+
+            reader.readAsDataURL(input.files[0]);
+        } else {
+            // ファイルが選択されていない場合、プレビューを隠す
+            preview.src = "#";
+            preview.classList.add('hidden');
+        }
+    }
+</script>

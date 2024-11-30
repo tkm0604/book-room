@@ -21,7 +21,7 @@
                  <div class="card s.shadow-lg">
                     <a class="card-link" href="{{ route('post.show', $post )}}">
                         <div class="card-user">
-                            <img class="card-user__avatar" src="{{ isset($post->user) && $post->user->avatar !== 'user_default.jpg' ? asset($post->user->avatar) : asset('storage/avatar/user_default.jpg')}}">
+                            <img class="card-user__avatar mr-1" src="{{ isset($post->user) && $post->user->avatar !== 'user_default.jpg' ? asset($post->user->avatar) : asset('storage/avatar/user_default.jpg')}}" alt="">
                             <p class="card-user__name">{{ $post->user->name }}</p>
                         </div>
                         <div class="card-content">
@@ -34,12 +34,12 @@
                     <div class="card-bottom">
                         @if (auth()->check())
                             <a class="card-button" href="{{ route('post.show', $post) }}">
-                                <button class="">コメントする</button>
+                                <div class="">コメントする</div>
                             </a>
                         @else
                             {{-- 未ログインの場合はアラートを表示して遷移を防ぐ --}}
                             <a href="javascript:void(0);" class="card-button" onclick="return showAlert();">
-                                <button class="">コメントする</button>
+                                <div class="">コメントする</div>
                             </a>
                         @endif
                         <div class="card-content__badges">

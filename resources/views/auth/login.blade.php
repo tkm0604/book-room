@@ -37,7 +37,7 @@
             <label for="" class="inline-flex items-center">
                 <span class="ms-2 text-sm text-gray-600">
                     <a href="{{route('twitter.redirect') }}" class="btn btn-primary flex items-center">
-                        <img style="width:40px" src="{{ asset('logo/x_logo.png') }}" alt="">
+                        <img style="width:40px" src="{{ asset('storage/common/x_logo.png') }}" alt="">
                         Xアカウントでログイン
                     </a>
                 </span>

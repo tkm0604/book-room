@@ -16,7 +16,7 @@
                         <div class="card post-show s.shadow-lg">
                             <a class="card-link" href="{{ route('post.show', $post) }}">
                                 <div class="card-user">
-                                    <img class="card-user__avatar"
+                                    <img class="card-user__avatar mr-1"
                                         src="{{ isset($post->user) && $post->user->avatar !== 'user_default.jpg' ? asset($post->user->avatar) : asset('storage/avatar/user_default.jpg') }}">
                                     <p class="card-user__name">{{ $post->user->name }}</p>
                                 </div>
@@ -57,10 +57,10 @@
                     <div class="faceicon">
                         @if ($comment->user->id === auth()->user()->id)
                             {{-- ログインユーザーのアバター --}}
-                            <img src="{{ asset(auth()->user()->avatar) }}" alt="">
+                            <img class="card-user__avatar mr-1" src="{{ asset(auth()->user()->avatar) }}" alt="">
                         @else
                             {{-- 返信者（他のユーザー）のアバター --}}
-                            <img src="{{ asset($comment->user->avatar) }}" alt="">
+                            <img class="card-user__avatar mr-1" src="{{ asset($comment->user->avatar) }}" alt="">
                         @endif
                     </div>
                     <div class="chatting">
