@@ -39,5 +39,7 @@
                 {{ $slot }}
             </main>
         </div>
+        <!-- フッターを追加 -->
+        @include('layouts.footer')
     </body>
 </html>

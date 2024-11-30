@@ -14,7 +14,7 @@
 
                 @if (auth()->user() && (auth()->user()->email_verified_at || auth()->user()->twitter_token))
                     <!-- Navigation Links -->
-                    <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
+                    <div class="hidden  sm:-my-px sm:ml-10 sm:flex">
                         {{-- <x-nav-link :href="route('post.index')" :active="request()->routeIs('post.index')">
                         HOME
                     </x-nav-link> --}}
@@ -30,23 +30,14 @@
                         <x-nav-link :href="route('contact.create')">
                             お問い合わせ
                         </x-nav-link>
-                        <x-nav-link :href="route('site-policy')">
-                            サイトポリシー
-                        </x-nav-link>
-                        @can('admin')
-                            <x-nav-link :href="route('profile.index')">
-                                ユーザー一覧
-                            </x-nav-link>
-                        @endcan
-
                     </div>
                     @else
                     <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">
                         <x-nav-link :href="route('register')" :active="request()->routeIs('post.mypost')">
                             アカウントの作成
                         </x-nav-link>
-                        <x-nav-link :href="route('site-policy')">
-                            サイトポリシー
+                        <x-nav-link :href="route('login')">
+                            ログイン
                         </x-nav-link>
                     </div>
                 @endif
@@ -131,7 +122,7 @@
         </div> --}}
 
         <!-- Responsive Settings Options -->
-        <div class="pt-4 pb-1 border-t border-gray-200">
+        <div class="py-4 px-2 border-t border-gray-200">
             @if (auth()->check())
                 <div class="px-4">
                     <div class="font-medium text-base text-gray-800">{{ auth()->user()->name }}さん</div>
