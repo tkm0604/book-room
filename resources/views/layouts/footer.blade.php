@@ -1,5 +1,5 @@
 <footer>
-    <div class="px-2 py-2 max-w-7xl my-1 md:my-2 mx-auto">
+    <div class="px-2 pb-2 max-w-7xl my-1 md:my-2 mx-auto">
             <ul class="flex text-sm md:text-base">
                 <li class="mr-2">
                     <a class="flex hover:opacity-80" href="{{ route('site-policy') }}">
