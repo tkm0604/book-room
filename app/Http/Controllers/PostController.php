@@ -354,7 +354,8 @@ class PostController extends Controller
      */
     public function destroy(Request $request, Post $post)
     {
-        if ($request->user()->cannot('update', $post)) {
+
+        if ($request->user()->cannot('delete', $post)) {
             abort(403);
         }
 
@@ -367,10 +368,8 @@ class PostController extends Controller
             Storage::disk('s3')->delete($imagePath);
         }
 
-
         $post->comments()->delete();
         $post->delete();
-
 
         return redirect()->route('home')->with('message', '投稿を削除しました');
     }
