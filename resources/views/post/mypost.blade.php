@@ -6,13 +6,24 @@
         <x-message :message="session('message')" />
     </x-slot>
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="mx-4 sm:p-8">
+        <div class="sm:p-8">
             @if (count($posts) == 0)
                 <p class="mt-4">
                     あなたはまだ投稿していません。
                 </p>
             @else
-                <div class="card-wrap my-8">
+                {{-- 並び替えリンク --}}
+                <div style="max-width:150px;" class="ml-auto mt-8 justify-between flex gap-y-1">
+                    <a href="{{ route('post.index', ['sort' => 'desc']) }}"
+                        class="mr-2 {{ request('sort') === 'desc' ? 'font-bold' : '' }}">
+                        新しい順
+                    </a>
+                    <a href="{{ route('post.index', ['sort' => 'asc']) }}"
+                        class="{{ request('sort') === 'asc' ? 'font-bold' : '' }}">
+                        古い順
+                    </a>
+                </div>
+                <div class="card-wrap mt-4 mb-8">
                     @foreach ($posts as $post)
                         <div class="card s.shadow-lg">
                             <a class="card-link" href="{{ route('post.show', $post) }}">

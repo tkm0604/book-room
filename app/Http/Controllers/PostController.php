@@ -18,7 +18,8 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::orderBy('created_at', 'desc')->paginate(6);
+        $sortOrder = request()->query('sort', 'desc');
+        $posts = Post::orderBy('created_at', $sortOrder)->paginate(6);
         $user = auth()->user();
         return view('index', compact('posts', 'user'));
     }
@@ -204,77 +205,6 @@ class PostController extends Controller
         return response()->json($post); // JSON形式で返す
     }
 
-    // public function updateApi(Request $request, $id)
-    // {
-    //     // 投稿を取得
-    //     $post = Post::findOrFail($id);
-    //     // ポリシーを使用して認可
-    //     if ($request->user()->cannot('update', $post)) {
-    //         abort(403);
-    //     }
-
-    //     // バリデーション
-    //     $validated = $request->validate([
-    //         'title' => 'required|string|max:50', // 最大50文字に変更（Xへの投稿の文字数制限）
-    //         'body' => 'required|string|max:150', // 最大150文字に変更（Xへの投稿の文字数制限）
-    //         'image' => ['required', 'file', 'image', 'mimes:jpeg,png,jpg', 'max:5120'], // フォーマットとサイズ制限
-    //     ]);
-
-    //     // タイトルと本文の更新
-    //     $post->title = $validated['title'];
-    //     $post->body = $validated['body'];
-
-    //     // 画像がアップロードされた場合の処理
-    //     if ($request->file('image')) {
-    //         $original = $request->file('image')->getClientOriginalName(); // 画像の元の名前を取得
-    //         $name = date('YmdHis') . '_' . $original; // 名前を一意に変更
-    //         $path = $request->file('image')->storeAs('images/post_images', $name, 's3'); // S3にアップロード
-    //         $url = Storage::disk('s3')->url($path); // アップロードされた画像のURLを取得
-
-    //         // 古い画像を削除
-    //         if ($post->image) {
-    //             $oldImagePath = parse_url($post->image, PHP_URL_PATH); // 古い画像のパスを抽出
-    //             $oldImagePath = ltrim($oldImagePath, '/'); // 先頭のスラッシュを削除
-    //             Storage::disk('s3')->delete($oldImagePath); // S3から古い画像を削除
-    //         }
-
-    //         // 新しい画像のURLを保存
-    //         $post->image = $url;
-    //     }
-
-    //     // 古いツイートを削除
-    //     if ($post->tweet_id) {
-    //         Log::info("削除対象のツイートID: {$post->tweet_id}");
-    //         if (!$this->deleteTweet($post->tweet_id)) {
-    //             Log::error("ツイート削除に失敗しました: {$post->tweet_id}");
-    //             return response()->json(['error' => 'ツイート削除に失敗しました。もう一度試してください。'], 500);
-    //         }
-    //         Log::info("ツイート削除に成功しました: {$post->tweet_id}");
-    //     }
-
-    //     // 新しいツイートを作成
-    //     Log::info("新しいツイートを作成します: タイトル = {$post->title}, 本文 = {$post->body}");
-    //     $newTweetId = $this->postTweet($post->title, $post->body, $post->image);
-
-    //     if ($newTweetId) {
-    //         $post->tweet_id = $newTweetId;
-    //         Log::info("新しいツイートが作成されました: {$newTweetId}");
-    //     } else {
-    //         Log::error("新しいツイートの作成に失敗しました");
-    //         return response()->json(['error' => '新しいツイートの作成に失敗しました。'], 500);
-    //     }
-
-    //     // 投稿を保存
-    //     if ($post->save()) {
-    //         Log::info("投稿が正常に保存されました。投稿ID: {$post->id}");
-    //     } else {
-    //         Log::error("投稿の保存に失敗しました。投稿ID: {$post->id}");
-    //         return response()->json(['error' => '投稿の保存に失敗しました。'], 500);
-    //     }
-
-    //     // JSONレスポンスを返す
-    //     return response()->json(['message' => '投稿が更新されました'], 200);
-    // }
 
     /**
      * Update the specified resource in storage.
@@ -377,15 +307,17 @@ class PostController extends Controller
 
     public function mypost()
     {
+        $sortOrder = request()->query('sort', 'desc');
         $user = auth()->user();
-        $posts = Post::where('user_id', $user->id)->orderBy('created_at', 'desc')->paginate(6);
+        $posts = Post::where('user_id', $user->id)->orderBy('created_at', $sortOrder)->paginate(6);
         return view('post.mypost', compact('posts'));
     }
 
     public function mycomment()
     {
+        $sortOrder = request()->query('sort', 'desc');
         $user = auth()->user();
-        $comments = Comment::where('user_id', $user->id)->orderBy('created_at', 'desc')->paginate(6);
+        $comments = Comment::where('user_id', $user->id)->orderBy('created_at', $sortOrder)->paginate(6);
         return view('post.mycomment', compact('comments'));
     }
 }

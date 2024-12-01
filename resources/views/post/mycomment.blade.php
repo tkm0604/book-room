@@ -12,7 +12,18 @@
                     あなたはまだ投稿していません。
                 </p>
             @else
-                <div class="card-wrap my-8">
+                {{-- 並び替えリンク --}}
+                <div style="max-width:150px;" class="ml-auto mt-8 justify-between flex gap-y-1">
+                    <a href="{{ route('post.index', ['sort' => 'desc']) }}"
+                        class="mr-2 {{ request('sort') === 'desc' ? 'font-bold' : '' }}">
+                        新しい順
+                    </a>
+                    <a href="{{ route('post.index', ['sort' => 'asc']) }}"
+                        class="{{ request('sort') === 'asc' ? 'font-bold' : '' }}">
+                        古い順
+                    </a>
+                </div>
+                <div class="card-wrap mt-4 mb-8">
                     @foreach ($comments->unique('post_id') as $comment)
                         @php
                             //コメントした投稿
