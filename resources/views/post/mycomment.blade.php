@@ -69,10 +69,11 @@
                             </div>
                         </div>
                     @endforeach
-                    <!-- ページネーションリンク -->
-                    <div class="mx-auto w-full mb-4">
-                        {{ $comments->links('') }}
-                    </div>
+                <!-- ページネーションリンク -->
+                <div class="mx-auto w-full mb-4">
+                    {{ $posts->links('vendor.pagination.tailwind') }}
+                    <p class="text-center mt-2">{{ $posts->firstItem() }}〜{{ $posts->lastItem() }}件を表示（全{{ $posts->total() }}件）</p>
+                </div>
                 </div>
             @endif
         </div>

@@ -75,7 +75,8 @@
                 @endforeach
                 <!-- ページネーションリンク -->
                 <div class="mx-auto w-full mb-4">
-                    {{ $posts->links('') }}
+                    {{ $posts->links('vendor.pagination.tailwind') }}
+                    <p class="text-center mt-2">{{ $posts->firstItem() }}〜{{ $posts->lastItem() }}件を表示（全{{ $posts->total() }}件）</p>
                 </div>
             </div>
 
