@@ -21,15 +21,18 @@
         <div class="card-wrap my-8">
             @foreach ($posts as $post)
                 <div class="card s.shadow-lg">
-                    <a class="card-link" href="{{ route('post.show', $post )}}">
+                    <a class="card-link" href="{{ route('post.show', $post) }}">
                         <div class="card-user">
-                            <img class="card-user__avatar mr-1" src="{{ isset($post->user) && $post->user->avatar !== 'user_default.jpg' ? asset($post->user->avatar) : asset('storage/avatar/user_default.jpg')}}" alt="">
+                            <img class="card-user__avatar mr-1"
+                                src="{{ isset($post->user) && $post->user->avatar !== 'user_default.jpg' ? asset($post->user->avatar) : asset('storage/avatar/user_default.jpg') }}"
+                                alt="">
                             <p class="card-user__name">{{ $post->user->name }}</p>
                         </div>
                         <div class="card-content">
                             <p class="card-content__date">投稿日:{{ $post->created_at->diffForHumans() }}</p>
                             <p class="card-content__title">{{ $post->title }}</p>
-                            <p class="card-content__body">{{ removeBookRoomTag(Str::limit($post->body, 50, '...')) }}</p>
+                            <p class="card-content__body">{{ removeBookRoomTag(Str::limit($post->body, 50, '...')) }}
+                            </p>
                             <img class="card-content__img" src="{{ $post->image }}" alt="">
                         </div>
                     </a>
@@ -57,6 +60,10 @@
                     </div>
                 </div>
             @endforeach
+            <!-- ページネーションリンク -->
+            <div class="mx-auto w-full mb-4">
+                {{ $posts->links('') }}
+            </div>
         </div>
 
     </div>

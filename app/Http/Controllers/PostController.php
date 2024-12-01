@@ -18,7 +18,7 @@ class PostController extends Controller
      */
     public function index()
     {
-        $posts = Post::orderBy('created_at', 'desc')->get();
+        $posts = Post::orderBy('created_at', 'desc')->paginate(6);
         $user = auth()->user();
         return view('index', compact('posts', 'user'));
     }
@@ -378,14 +378,14 @@ class PostController extends Controller
     public function mypost()
     {
         $user = auth()->user();
-        $posts = Post::where('user_id', $user->id)->orderBy('created_at', 'desc')->get();
+        $posts = Post::where('user_id', $user->id)->orderBy('created_at', 'desc')->paginate(6);
         return view('post.mypost', compact('posts'));
     }
 
     public function mycomment()
     {
         $user = auth()->user();
-        $comments = Comment::where('user_id', $user->id)->orderBy('created_at', 'desc')->get();
+        $comments = Comment::where('user_id', $user->id)->orderBy('created_at', 'desc')->paginate(6);
         return view('post.mycomment', compact('comments'));
     }
 }
