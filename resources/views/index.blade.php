@@ -66,9 +66,11 @@
                                         返信{{ $post->comments->count() }}件
                                     </span>
                                 @endif
-                                <span class="badge-visits">
-                                    閲覧回数10
-                                </span>
+                                @if ($post->viewcount)
+                                    <span class="badge-visits">
+                                        閲覧回数{{ $post->viewcount }}
+                                    </span>
+                                @endif
                             </div>
                         </div>
                     </div>
@@ -76,7 +78,8 @@
                 <!-- ページネーションリンク -->
                 <div class="mx-auto w-full mb-4">
                     {{ $posts->links('vendor.pagination.tailwind') }}
-                    <p class="text-center mt-2">{{ $posts->firstItem() }}〜{{ $posts->lastItem() }}件を表示（全{{ $posts->total() }}件）</p>
+                    <p class="text-center mt-2">
+                        {{ $posts->firstItem() }}〜{{ $posts->lastItem() }}件を表示（全{{ $posts->total() }}件）</p>
                 </div>
             </div>
 

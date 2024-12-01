@@ -190,15 +190,21 @@ class PostController extends Controller
      */
     public function show(Post $post)
     {
-        //未ログインユーザーの場合はエラーを返す
-        // if(!auth()->check()){
-        //     return back()->with('message','ログインしてください');
-        // }
+        //セッションに保存されているキーviewed_postsの値を取得
+        $viewedPosts = session()->get('viewed_posts', []);
+
+        // 投稿したユーザー以外、かつ未カウントの場合のみカウント
+        if(auth()->id() !== $post->user_id && !in_array($post->id, $viewedPosts)) {
+            $post->increment('viewcount');
+            session()->push('viewed_posts', $post->id);
+        }
 
         return view('post.show', compact('post'));
     }
 
-
+    /**
+    *投稿の編集画面ではJSON形式でデータを返す
+    */
     public function showApi($id)
     {
         $post = Post::findOrFail($id); // 投稿を取得

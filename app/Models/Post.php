@@ -15,6 +15,7 @@ class Post extends Model
         'image',
         'user_id',
         'tweet_id',
+        'viewcount',
     ];
 
     public function user()

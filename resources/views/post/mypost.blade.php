@@ -58,9 +58,11 @@
                                             返信{{ $post->comments->count() }}件
                                         </span>
                                     @endif
+                                    @if ($post->viewcount)
                                     <span class="badge-visits">
-                                        閲覧回数10
+                                        閲覧回数{{ $post->viewcount }}
                                     </span>
+                                @endif
                                 </div>
                             </div>
                         </div>
