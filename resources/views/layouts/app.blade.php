@@ -11,17 +11,14 @@
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
-    <!-- Build Assets -->
-    <link rel="stylesheet" href="{{ asset('build/assets/app-BaVMVknW.css') }}">
-    <link rel="stylesheet" href="{{ asset('build/assets/app-DHNVjPLU.css') }}">
-    <script src="{{ asset('build/assets/app-BHQrhEdN.js') }}" defer></script>
+        <!-- Scripts -->
+        @vite(['resources/css/app.css', 'resources/js/app.js'])
+        <!-- 追加したjsファイル -->
+        <script src="{{ asset('js/script.js') }}"></script>
 
-    <!-- 追加したjsファイル -->
-    <script src="{{ asset('js/script.js') }}"></script>
-
-    <!-- 追加したcssファイル -->
-    <link rel="stylesheet" href="{{ asset('css/forum.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/card.css') }}">
+        <!-- 追加したcssファイル -->
+        <link rel="stylesheet" href="{{ asset('css/forum.css') }}">
+        <link rel="stylesheet" href="{{ asset('css/card.css') }}">
 
     </head>
     <body class="font-sans antialiased">
