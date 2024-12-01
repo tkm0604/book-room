@@ -31,8 +31,8 @@
 }
 
 .card-user__avatar {
-    width: 2rem;
-    height: 2rem;
+    width: 2.5rem;
+    height: 2.5rem;
     object-fit: cover;
     /* margin-right: 5px; */
     border-radius: 100%;
@@ -186,6 +186,10 @@
 
 .balloon6.reverse .faceicon {
     margin-left: -50px;
+    margin-right: 0;
+}
+
+.balloon6.reverse .faceicon img{
     margin-right: 0;
 }
 
