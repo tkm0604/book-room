@@ -29,14 +29,10 @@
                         @php
                             //コメントした投稿
                             $post = $comment->post;
-                            // dd($post);
                         @endphp
                         @if ($post)
                             <div class="card s.shadow-lg">
-                                {{-- @php
-                            dd($post);
-                            @endphp --}}
-                                <a class="card-link" href="{{ route('post.show', ['post' => $post->id]) }}">
+                                <a class="card-link" href="{{ route('post.show', $post->id) }}">
                                     <div class="card-user">
                                         <img class="card-user__avatar mr-1"
                                             src="{{ isset($post->user) && $post->user->avatar !== 'user_default.jpg' ? asset($post->user->avatar) : asset('storage/avatar/user_default.jpg') }}"
