@@ -38,7 +38,7 @@
                                     <p class="card-content__title">{{ $post->title }}</p>
                                     <p class="card-content__body">
                                         {{ removeBookRoomTag(Str::limit($post->body, 50, '...')) }}</p>
-                                    <img class="card-content__img" src="{{ $post->image }}" alt="">
+                                    <img class="card-content__img mx-auto" src="{{ $post->image }}" alt="">
                                 </div>
                             </a>
                             <div class="card-bottom">
