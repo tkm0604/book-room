@@ -290,7 +290,6 @@ class PostController extends Controller
      */
     public function destroy(Request $request, Post $post)
     {
-
         if ($request->user()->cannot('delete', $post)) {
             abort(403);
         }

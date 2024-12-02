@@ -47,9 +47,9 @@ class ProfileController extends Controller
             // 既存のアバター画像を削除
             $user = User::find(auth()->user()->id);
             if ($user->avatar !== 'default.jpg') {
-                 // S3のURLを画像パスに変換
-                 $oldAvatarPath = parse_url($user->avatar, PHP_URL_PATH); //パスを抽出
-                 $oldAvatarPath = ltrim($oldAvatarPath, '/'); // パスの先頭にスラッシュがあれば削除
+                // S3のURLを画像パスに変換
+                $oldAvatarPath = parse_url($user->avatar, PHP_URL_PATH); //パスを抽出
+                $oldAvatarPath = ltrim($oldAvatarPath, '/'); // パスの先頭にスラッシュがあれば削除
                 // 古い画像をS3から削除
                 Storage::disk('s3')->delete($oldAvatarPath);
             }
@@ -64,7 +64,6 @@ class ProfileController extends Controller
         }
 
         $request->user()->save();
-        // dd($request);
         return Redirect::route('profile.edit')->with('status', 'profile-updated');
     }
 
@@ -73,12 +72,32 @@ class ProfileController extends Controller
      */
     public function destroy(Request $request): RedirectResponse
     {
+        // リクエストから現在のユーザーを取得
+        $user = $request->user();
+
+
+    // Twitterアカウントの場合
+    if ($user->twitter_id) {
+        // 関連する投稿を削除（外部キー制約エラーを回避するため）
+        $user->posts()->delete();
+
+        // ユーザー削除
+        $user->delete();
+        Auth::logout();
+
+        $request->session()->invalidate();
+        $request->session()->regenerateToken();
+
+        return redirect('/')->with('message', 'アカウントを削除しました');
+    }
+        // 通常のアカウントの場合
         $request->validateWithBag('userDeletion', [
             'password' => ['required', 'current_password'],
         ]);
 
         $user = $request->user();
-
+        // ユーザー削除処理
+        $user->delete();
         Auth::logout();
 
         $user->delete();

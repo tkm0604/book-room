@@ -20,12 +20,18 @@
             @method('delete')
 
             <h2 class="text-lg font-medium text-gray-900">
-                {{ __('Are you sure you want to delete your account?') }}
+                {{ __('アカウントを削除しますか？') }}
             </h2>
 
             <p class="mt-1 text-sm text-gray-600">
-                {{ __('Once your account is deleted, all of its resources and data will be permanently deleted. Please enter your password to confirm you would like to permanently delete your account.') }}
+                {{ __('アカウントを削除すると、関連するすべてのデータが永久に削除されます。この操作を実行しますか？') }}
             </p>
+             <!-- X（Twitter）アカウントの場合はパスワードフィールドを非表示 -->
+             @if(auth()->user()->twitter_id)
+             <p class="mt-1 text-sm text-red-600">
+                {{ __('パスワード入力は不要です。この操作を実行するとアカウントが削除されます。') }}
+            </p>
+            @else
 
             <div class="mt-6">
                 <x-input-label for="password" value="{{ __('Password') }}" class="sr-only" />
@@ -40,7 +46,7 @@
 
                 <x-input-error :messages="$errors->userDeletion->get('password')" class="mt-2" />
             </div>
-
+            @endif
             <div class="mt-6 flex justify-end">
                 <x-secondary-button x-on:click="$dispatch('close')">
                     {{ __('Cancel') }}

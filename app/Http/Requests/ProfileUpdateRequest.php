@@ -15,17 +15,24 @@ class ProfileUpdateRequest extends FormRequest
      */
     public function rules(): array
     {
-        return [
+        $rules = [
             'name' => ['required', 'string', 'max:255'],
-            'email' => [
+            'avatar' => ['nullable', 'file', 'image', 'mimes:jpeg,png,jpg', 'max:5120'],
+        ];
+
+        // 通常ユーザーのみメールアドレスを必須にする
+        if ($this->user() && $this->user()->twitter_id == '') {
+            $rules['email'] = [
                 'required',
                 'string',
                 'lowercase',
                 'email',
                 'max:255',
                 Rule::unique(User::class)->ignore($this->user()->id),
-            ],
-            'avatar' => ['nullable', 'file', 'image', 'mimes:jpeg,png,jpg', 'max:5120'],
-        ];
+            ];
+        }
+
+        return $rules;
     }
 }
+
