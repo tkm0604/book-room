@@ -8,7 +8,7 @@
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="sm:p-8">
-            @if (!$comments)
+            @if (count($comments) == 0)
                 <p class="mt-4">
                     あなたはまだ投稿していません。
                 </p>
