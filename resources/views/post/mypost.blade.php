@@ -13,7 +13,7 @@
                 </p>
             @else
                 {{-- 並び替えリンク --}}
-                <div style="max-width:150px;" class="ml-auto mt-8 justify-between flex gap-y-1">
+                {{-- <div style="max-width:150px;" class="ml-auto mt-8 justify-between flex gap-y-1">
                     <a href="{{ route('post.index', ['sort' => 'desc']) }}"
                         class="mr-2 {{ request('sort') === 'desc' ? 'font-bold' : '' }}">
                         新しい順
@@ -22,7 +22,7 @@
                         class="{{ request('sort') === 'asc' ? 'font-bold' : '' }}">
                         古い順
                     </a>
-                </div>
+                </div> --}}
                 <div class="card-wrap mt-4 mb-8">
                     @foreach ($posts as $post)
                         <div class="card s.shadow-lg">
