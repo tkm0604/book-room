@@ -22,8 +22,11 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::table('users', function (Blueprint $table) {
-            $table->dropColumn('twitter_id');
-        });
+        // カラムが存在する場合のみ削除する
+        if (Schema::hasColumn('users', 'twitter_id')) {
+            Schema::table('users', function (Blueprint $table) {
+                $table->dropColumn('twitter_id');
+            });
+        }
     }
 };
