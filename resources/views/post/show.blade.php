@@ -20,7 +20,7 @@
                                 <div class="card-content">
                                     <p class="card-content__date">投稿日:{{ $post->created_at->diffForHumans() }}</p>
                                     <p class="card-content__title">タイトル:{{ $post->title }}</p>
-                                    
+
                                     {{-- 投稿削除編集ボタン  ここから --}}
                                     <div class="flex justify-end gap-x-2 mb-2">
                                         @can('delete',$post)
@@ -58,16 +58,17 @@
                     <div class="faceicon">
                         @if (auth()->check() && $comment->user->id === auth()->user()->id)
                             {{-- ログインユーザーのアバター --}}
-                            <img class="card-user__avatar mr-1" src="{{ asset(auth()->user()->avatar) }}" alt="">
+                            <img class="card-user__avatar mr-1" src="{{ isset($comment->user) && $comment->user->avatar !== 'user_default.jpg' ? asset($comment->user->avatar) : asset('storage/avatar/user_default.jpg') }}" alt="">
                         @else
                             {{-- 返信者（他のユーザー）のアバター --}}
-                            <img class="card-user__avatar mr-1" src="{{ asset($comment->user->avatar) }}" alt="">
+                            <img class="card-user__avatar mr-1" src="{{ isset($comment->user->avatar) && $comment->user->avatar !== 'user_default.jpg' ? asset($comment->user->avatar) : asset('storage/avatar/user_default.jpg') }}" alt="">
                         @endif
                     </div>
                     <div class="chatting">
                         <div class="says">
                             <p> {{ $comment->body }}</p>
                         </div>
+                        <p class="says-name">{{ $comment->user->name }}</p>
                         <p class="says-date">{{ $comment->created_at->diffForHumans() }}
                         </p>
                     </div>

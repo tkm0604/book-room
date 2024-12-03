@@ -30,6 +30,11 @@
                         {{-- <x-nav-link :href="route('contact.create')">
                             お問い合わせ
                         </x-nav-link> --}}
+                        @can('admin')
+                            <x-nav-link :href="route('profile.index')" :active="request()->routeIs('profile.index')">
+                                ユーザー一覧
+                            </x-nav-link>
+                        @endcan
                     </div>
                     @else
                     <div class="hidden space-x-8 sm:-my-px sm:ml-10 sm:flex">

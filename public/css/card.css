@@ -174,10 +174,14 @@
 }
 
 .says-date {
-    margin-top: 5px;
+    margin-top: 0px;
     font-size: .6rem;
 }
 
+.says-name {
+    margin-top: 5px;
+    font-size: .6rem;
+}
 
 /* 右コメント */
 .balloon6.reverse {

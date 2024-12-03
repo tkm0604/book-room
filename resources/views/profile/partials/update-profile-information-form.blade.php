@@ -48,8 +48,16 @@
     @endif
 
     {{-- アバター更新 --}}
+    {{-- @php
+        dd($user->avatar);
+    @endphp --}}
     <div>
-        <img id="avatar-preview" class="rounded-full w-24 h-24 object-cover" src="{{ $user->avatar ?: asset('storage/avatar/user_default.jpg') }}" alt="プロフィール画像">
+        <img id="avatar-preview" class="rounded-full w-24 h-24 object-cover"
+    src="{{ isset($user->avatar) && $user->avatar !== 'user_default.jpg'
+        ? asset( $user->avatar)
+        : asset('storage/avatar/user_default.jpg') }}"
+    alt="プロフィール画像">
+
         <x-input-label for="avatar" :value="__('プロフィール画像（任意・5MBまで）')" />
         <x-text-input id="avatar" name="avatar" type="file" class="mt-1 block w-full" onchange="previewAvatar(event)" />
         <x-input-error class="mt-2" :messages="$errors->get('avatar')" />
