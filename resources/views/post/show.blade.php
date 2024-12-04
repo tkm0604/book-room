@@ -43,7 +43,7 @@
                                     </div>
 
                                     <p class="card-content__body">
-                                        {{ removeBookRoomTag($post->body) }}</p>
+                                        {!! nl2br(makeLinks($post->body)) !!}</p>
                                 </div>
                             </a>
                         </div>
@@ -66,7 +66,7 @@
                     </div>
                     <div class="chatting">
                         <div class="says">
-                            <p> {{ $comment->body }}</p>
+                            <p>{!! nl2br(makeLinks($comment->body)) !!}</p>
                         </div>
                         <p class="says-name">{{ $comment->user->name }}</p>
                         <p class="says-date">{{ $comment->created_at->diffForHumans() }}

@@ -44,7 +44,7 @@
                                 <p class="card-content__date">投稿日:{{ $post->created_at->diffForHumans() }}</p>
                                 <p class="card-content__title">{{ $post->title }}</p>
                                 <p class="card-content__body">
-                                    {{ removeBookRoomTag(Str::limit($post->body, 50, '...')) }}
+                                    {{ Str::limit($post->body, 50, '...') }}
                                 </p>
                                 <img class="card-content__img mx-auto" src="{{ $post->image }}" alt="">
                             </div>

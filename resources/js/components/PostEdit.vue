@@ -36,7 +36,7 @@
 
       <!-- 画像プレビュー -->
       <div v-if="imagePreview" class="mb-4">
-        <img :src="imagePreview" alt="画像プレビュー" class="w-full max-h-60 object-contain" />
+        <img :src="imagePreview" alt="画像プレビュー" class="w-full max-h-60 object-contain mx-auto" />
       </div>
 
       <!-- 画像アップロード -->

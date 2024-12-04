@@ -35,7 +35,7 @@
 
       <!-- 画像プレビュー -->
       <div v-if="imagePreview" class="mt-4">
-        <img :src="imagePreview" alt="画像プレビュー" style="max-width: 100%; max-height: 300px;" />
+        <img  :src="imagePreview" alt="画像プレビュー" class="w-full max-h-60 object-contain mx-auto"/>
       </div>
 
       <!-- 画像アップロード -->
@@ -152,12 +152,9 @@ export default {
     submitPost() {
       // 本文末尾に#book-roomを追加
       let finalBody = this.body;
-      if (this.body && !this.body.includes("#book-room")) {
-        finalBody += ' #bookroom';  // 本文に自動的に#book-roomを追加
-      }
 
-            // ボタンを無効化
-            this.isSubmitting = true;
+      // ボタンを無効化
+        this.isSubmitting = true;
 
       // バリデーション実行
       this.validateField('title');
