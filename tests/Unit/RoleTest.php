@@ -18,7 +18,6 @@ class RoleTest extends TestCase
 
         $this->assertDatabaseHas('roles', [
             'id' => $role->id,
-            // ...他の必要なフィールド...
         ]);
     }
 
