@@ -21,10 +21,16 @@ class CommentFactory extends Factory
      */
     public function definition(): array
     {
-        return [
-            'post_id' => Post::inRandomOrder()->first()->id, // ランダムな投稿
-            'user_id' => User::inRandomOrder()->first()->id, // ランダムなユーザー
-            'body' => $this->faker->sentence(),             // ランダムなコメント内容
+        // return [
+        //     'post_id' => Post::inRandomOrder()->first()->id, // ランダムな投稿
+        //     'user_id' => User::inRandomOrder()->first()->id, // ランダムなユーザー
+        //     'body' => $this->faker->sentence(),             // ランダムなコメント内容
+        // ];
+
+        return[
+            'post_id' => Post::factory(),
+            'user_id' => User::factory(),
+            'body' => $this->faker->sentence(),
         ];
     }
 }

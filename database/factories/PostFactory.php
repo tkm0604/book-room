@@ -3,7 +3,8 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-
+use App\Models\Post;
+use App\Models\User;
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Post>
  */
@@ -18,20 +19,27 @@ class PostFactory extends Factory
     {
 
         // 使用する画像のリスト
-        $images =[
-            'https://book-room.s3.ap-northeast-1.amazonaws.com/images/post_images/20241203083126_sample-book-1.jpg',
-            'https://book-room.s3.ap-northeast-1.amazonaws.com/images/post_images/20241203083159_sample-book-2.jpg',
-            'https://book-room.s3.ap-northeast-1.amazonaws.com/images/post_images/20241203083224_sample-book-3.jpg',
-            'https://book-room.s3.ap-northeast-1.amazonaws.com/images/post_images/20241203083241_sample-book-4.jpg',
+        // $images =[
+        //     'https://book-room.s3.ap-northeast-1.amazonaws.com/images/post_images/20241203083126_sample-book-1.jpg',
+        //     'https://book-room.s3.ap-northeast-1.amazonaws.com/images/post_images/20241203083159_sample-book-2.jpg',
+        //     'https://book-room.s3.ap-northeast-1.amazonaws.com/images/post_images/20241203083224_sample-book-3.jpg',
+        //     'https://book-room.s3.ap-northeast-1.amazonaws.com/images/post_images/20241203083241_sample-book-4.jpg',
 
-        ];
+        // ];
+        // return [
+        //     'title' => $this->faker->sentence(),
+        //     'body' => $this->faker->paragraph(),
+        //     'user_id' => '1',
+        //     'created_at' => $this->faker->dateTime(),
+        //     'updated_at' => $this->faker->dateTime(),
+        //     'image' => $this->faker->randomElement($images),
+        // ];
+
         return [
-            'title' => $this->faker->sentence(),
-            'body' => $this->faker->paragraph(),
-            'user_id' => '1',
-            'created_at' => $this->faker->dateTime(),
-            'updated_at' => $this->faker->dateTime(),
-            'image' => $this->faker->randomElement($images),
+            'title' => $this->faker->sentence(), // ランダムな文章を生成
+            'body' => $this->faker->paragraph(), // ランダムな段落を生成
+            'user_id' => User::factory(),
+            'image' => $this->faker->imageUrl,
         ];
     }
 }
